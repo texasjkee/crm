@@ -36,6 +36,7 @@ export const Cell = styled.div`
 export const HeaderContainer = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid rgba(166, 168, 179, 0.12);
 `;
 
@@ -66,7 +67,6 @@ export const Day = styled("div")`
     box-sizing: border-box;
     color: #98a0a6;
     position: relative;
-    pointer-events: none;
     z-index: 1;
 
     &:nth-of-type(7n + 7) {
@@ -122,7 +122,7 @@ export const Day = styled("div")`
 
     &.disabled {
         color: rgba(152, 160, 166, 0.6);
-        background-color: #ffffff;
+        background-color: var(--primary-dark-white);
         background-image: url(./assets/svg/disabled.svg)
         cursor: not-allowed;
     }

@@ -2,21 +2,19 @@
 @import 'variables/global';
 
 body {
-	margin: 0;
-	font-family: Roboto, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-		sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	background-color: var(--white);
-	width: 100%;
-    height: 100%;
+	font-family: var(--font-family-main);
+	color: #51565d;
+	font-size: var(--font-m);
 }
 
-code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-		monospace;
+.app {
+	color: var(--primary-color);
 }
+
+.app {
+	min-height: 100vh;
+}
+
 
 h1 {
 	font-size: 18px;

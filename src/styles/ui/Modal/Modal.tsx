@@ -1,7 +1,14 @@
 import React from "react";
+import {
+    useState,
+    type ReactNode,
+    useRef,
+    useEffect,
+    useCallback,
+} from "react";
+// import Portal from "../Portal/Portal";
 import { css } from "@emotion/react";
-import { useState, ReactNode, useRef, useEffect, useCallback } from "react";
-import Portal from "../Portal/Portal";
+import styled from "@emotion/styled";
 
 export interface ModalProps {
     className?: string;
@@ -10,11 +17,10 @@ export interface ModalProps {
     onClose?: () => void;
     lazy?: boolean;
 }
-
 const ANIMATION_DELAY = 300;
 
 export const Modal: React.FC<ModalProps> = (props): JSX.Element => {
-    const { className, children, isOpen, onClose, lazy } = props;
+    const { children, isOpen, onClose, lazy } = props;
     const [isClosing, setIsClosing] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
 
@@ -24,6 +30,7 @@ export const Modal: React.FC<ModalProps> = (props): JSX.Element => {
         }
     }, [isOpen]);
 
+    console.log(isClosing, "isclosing");
     const timeRef = useRef<ReturnType<typeof setTimeout>>();
 
     const closeHandler = useCallback((): void => {
@@ -35,7 +42,6 @@ export const Modal: React.FC<ModalProps> = (props): JSX.Element => {
             }, ANIMATION_DELAY);
         }
     }, [onClose]);
-
     const onContentClick = (e: React.MouseEvent): void => {
         e.stopPropagation();
     };
@@ -63,43 +69,56 @@ export const Modal: React.FC<ModalProps> = (props): JSX.Element => {
         return <></>;
     }
 
-    const overlayStyles = css({
+    const addStyles = () =>
+        isOpen ? cls.opened : isClosing ? cls.isClosing : "";
+    return (
+        // <Portal>
+        <ModalContainer css={addStyles}>
+            <div css={cls.overlay} onClick={closeHandler}>
+                <div css={cls.content} onClick={onContentClick}>
+                    {children}
+                </div>
+            </div>
+        </ModalContainer>
+        // </Portal>
+    );
+};
+
+const cls = {
+    overlay: css({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
         height: "100%",
-        background: "var(--overlay-color)", // replace with your actual overlay color
-    });
-
-    const contentStyles = css({
+        background: "var(--overlay-color)",
+    }),
+    content: css({
         maxWidth: "60%",
         padding: "20px",
-        background: "var(--bg-color)", // replace with your actual background color
+        background: "var(--primary-dark-white)",
         borderRadius: "12px",
-        transform: `scale(${isClosing ? 0.2 : 1})`,
-        transition: "transform 0.3s",
-    });
-
-    return (
-        <Portal>
-            <div
-                css={css({
-                    position: "fixed",
-                    inset: "0",
-                    zIndex: "-1",
-                    opacity: "0",
-                    pointerEvents: "none",
-                })}
-            >
-                <div className={className}>
-                    <div css={overlayStyles} onClick={closeHandler}>
-                        <div css={contentStyles} onClick={onContentClick}>
-                            {children}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </Portal>
-    );
+        transform: "scale(0.5)",
+        transition: "0.3s transform",
+    }),
+    opened: css({
+        zIndex: "var(--modal-z-index)",
+        opacity: "1",
+        pointerEvents: "auto",
+        "& .content": {
+            transform: "scale(1)",
+        },
+    }),
+    isClosing: css({
+        "& .content": {
+            transform: "scale(0.2)",
+        },
+    }),
 };
+const ModalContainer = styled.div`
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+`;

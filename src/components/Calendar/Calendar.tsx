@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
     format,
     addMonths,
@@ -7,17 +7,17 @@ import {
     addDays,
     startOfWeek,
 } from "date-fns";
-import { css } from "@emotion/react";
 import { CalendarHeader } from "./CalendarHeader";
 import Days from "./Days";
 import Cells from "./Cells";
 import styled from "@emotion/styled";
+import TaskModal from "../TaskModal/TaskModal";
 
-// interface Task {
-//     id: string;
-//     title: string;
-//     date: Date;
-// }
+export interface Task {
+    id?: Date;
+    title?: string;
+    priority?: string[];
+}
 
 interface CalendarProps {
     year: number;
@@ -26,7 +26,16 @@ interface CalendarProps {
 
 const Calendar: React.FC<CalendarProps> = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
-    // const [tasks, setTasks] = useState<Task[]>([]);
+    const [isTaskModal, setIsTaskModal] = useState<boolean>(false);
+    const [tasks, setTasks] = useState<Task[]>([]);
+
+    const onCloseModal = useCallback(() => {
+        setIsTaskModal(false);
+    }, []);
+
+    const onShowModal = useCallback(() => {
+        setIsTaskModal(true);
+    }, []);
 
     const nextMonth = () => {
         setCurrentDate((prevDate) => addMonths(prevDate, 1));
@@ -48,29 +57,16 @@ const Calendar: React.FC<CalendarProps> = () => {
         return days;
     };
 
-    // const handleTaskCreation = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    //     if (e.key === "Enter") {
-    //         const inputValue = e.currentTarget.value.trim();
-    //         if (inputValue !== "") {
-    //             const newTask: Task = {
-    //                 id: `task-${Date.now()}`,
-    //                 title: inputValue,
-    //                 date: new Date(),
-    //             };
-    //             setTasks([...tasks, newTask]);
-    //             e.currentTarget.value = "";
-    //         }
-    //     }
-    // };
-
     const daysToRender = renderDays();
-
+    const holdaTask = (value: Task) => {
+        setTasks((prev) => [
+            ...prev,
+            { id: new Date(), priority: value.priority, title: value.title },
+        ]);
+    };
+    console.log(tasks, "tasks");
     return (
-        <Container
-            css={css`
-                height: 100vh;
-            `}
-        >
+        <Container>
             <CalendarHeader
                 currentDate={currentDate}
                 prevMonth={prevMonth}
@@ -80,8 +76,15 @@ const Calendar: React.FC<CalendarProps> = () => {
                 {daysToRender.map((day, index) => (
                     <Days key={index} day={day} />
                 ))}
-                <Cells currentDate={currentDate} />
+                <Cells onShowModal={onShowModal} currentDate={currentDate} />
             </CalendarWrapper>
+            {isTaskModal && (
+                <TaskModal
+                    holdTask={holdaTask}
+                    isOpen={isTaskModal}
+                    onClose={onCloseModal}
+                />
+            )}
         </Container>
     );
 };

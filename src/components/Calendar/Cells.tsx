@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
     addDays,
     endOfMonth,
@@ -15,54 +15,47 @@ import { css } from "@emotion/react";
 // import styled from "@emotion/styled";
 import { Day } from "./styles";
 import Icon from "./../../assets/svg/disabled.svg";
-import { Modal } from "../../styles/ui/Modal/Modal";
 
 interface IProps {
     currentDate: number | Date;
+    onShowModal: (day: Date) => void;
 }
-const Cells = memo(function Cells({ currentDate }: IProps) {
+const Cells = memo(function Cells({ currentDate, onShowModal }: IProps) {
     const dateFormat = "d";
     const monthStart = startOfMonth(currentDate);
     const monthEnd = endOfMonth(currentDate);
     const startDate = startOfWeek(monthStart);
     const endDate = endOfWeek(monthEnd);
-    const [isOpen, setIsOpen] = useState(false);
 
     const days = [];
     let day = startDate;
 
     while (day <= endDate) {
         for (let i = 0; i < 7; i++) {
-            days.push(day);
+            days.push({ day });
 
             day = addDays(day, 1);
         }
     }
-
-    const handleOpen = () => {
-        console.log("click");
-        setIsOpen(!isOpen);
-    };
 
     return (
         <>
             {days.map((item) => (
                 <Day
                     css={
-                        !isSameMonth(new Date(item), monthStart)
+                        !isSameMonth(new Date(item.day), monthStart)
                             ? dayStyle.disabled
-                            : isSameDay(item, new Date())
+                            : isSameDay(item.day, new Date())
                               ? dayStyle.selected
                               : ""
                     }
-                    key={item.toString()}
+                    key={item.day.toString()}
                 >
-                    <span>{format(item, dateFormat)}</span>
+                    <span>{format(item.day, dateFormat)}</span>
                     <div>
-                        <button onClick={handleOpen}>add</button>
-                        <Modal lazy isOpen={isOpen}>
-                            test
-                        </Modal>
+                        <button onClick={() => onShowModal(item.day)}>
+                            add
+                        </button>
                     </div>
                 </Day>
             ))}
@@ -77,7 +70,6 @@ export const dayStyle = {
         color: "rgba(#98a0a6, 0.6)",
         backgroundColor: "#ffffff",
         backgroundImage: ` url(${Icon})`,
-        cursor: "not-allowed",
     }),
     selected: css({
         backgroundColor: "var(--grey, 0.6)",
