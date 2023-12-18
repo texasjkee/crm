@@ -11,7 +11,7 @@ import { Task } from "../Calendar/Calendar";
 interface IProps {
     isOpen: boolean;
     onClose?: () => void;
-    holdTask: (task: Task) => void;
+    holdTask: (values: Pick<Task, "priority" | "title">) => void;
 }
 
 const TaskModal = ({ isOpen, onClose, holdTask }: IProps) => {
@@ -21,6 +21,7 @@ const TaskModal = ({ isOpen, onClose, holdTask }: IProps) => {
     const handleOnChange = React.useCallback((color: ColorResult) => {
         setColor((prev) => [...prev, color.hex]);
     }, []);
+
     const deleteHandler = React.useCallback(
         (color: string) => {
             const filteredColors = colors.filter((item) => item != color);
@@ -28,14 +29,17 @@ const TaskModal = ({ isOpen, onClose, holdTask }: IProps) => {
         },
         [colors]
     );
+
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         holdTask({ priority: colors, title: task });
         console.log(colors, task, "value");
         onClose && onClose();
     };
+
     const onChangeTextArea = (e: ChangeEvent<HTMLTextAreaElement>) =>
         setTask(e?.currentTarget.value);
+
     return (
         <MUIModal isOpen={isOpen} onClose={onClose}>
             <TaskForm onSubmit={handleSubmit}>
@@ -61,7 +65,11 @@ const TaskModal = ({ isOpen, onClose, holdTask }: IProps) => {
                         placeholder='Write a task'
                     />
                     <div css={buttonWrapper}>
-                        <Button type='submit' variant='outlined'>
+                        <Button
+                            disabled={task.length == 0}
+                            type='submit'
+                            variant='outlined'
+                        >
                             Save
                         </Button>
                     </div>

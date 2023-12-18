@@ -6,12 +6,12 @@ import { ReactComponent as DeleteIcon } from "../../assets/svg/delete.svg";
 
 interface LabelsProps {
     colors: string[];
-    deleteHandler: (color: string) => void;
+    deleteHandler?: (color: string) => void;
 }
 
 const Labels = memo(function Labels({ colors, deleteHandler }: LabelsProps) {
     const onDelete = (color: string) => {
-        deleteHandler(color);
+        deleteHandler && deleteHandler(color);
     };
     return (
         <StyledLabels>
@@ -24,7 +24,9 @@ const Labels = memo(function Labels({ colors, deleteHandler }: LabelsProps) {
                     `}
                     key={index}
                 >
-                    <DeleteButton onClick={() => onDelete(item)} />
+                    {!!deleteHandler && (
+                        <DeleteButton onClick={() => onDelete(item)} />
+                    )}
                     <LineIcon
                         css={css`
                             fill: ${item};
@@ -40,7 +42,7 @@ export default Labels;
 
 const StyledLabels = styled.div`
     display: flex;
-    gap: 5px;
+    gap: 0 5px;
 `;
 const DeleteButton = styled(DeleteIcon)`
     background: none;

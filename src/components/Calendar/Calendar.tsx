@@ -14,7 +14,7 @@ import styled from "@emotion/styled";
 import TaskModal from "../TaskModal/TaskModal";
 
 export interface Task {
-    id?: Date;
+    id: Date;
     title?: string;
     priority?: string[];
 }
@@ -28,12 +28,14 @@ const Calendar: React.FC<CalendarProps> = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [isTaskModal, setIsTaskModal] = useState<boolean>(false);
     const [tasks, setTasks] = useState<Task[]>([]);
+    const [selectedDay, setSelectedDay] = useState<Date>(currentDate);
 
     const onCloseModal = useCallback(() => {
         setIsTaskModal(false);
     }, []);
 
-    const onShowModal = useCallback(() => {
+    const onShowModal = useCallback((day: Date) => {
+        setSelectedDay(day);
         setIsTaskModal(true);
     }, []);
 
@@ -58,10 +60,11 @@ const Calendar: React.FC<CalendarProps> = () => {
     };
 
     const daysToRender = renderDays();
-    const holdaTask = (value: Task) => {
+
+    const holdaTask = (values: Pick<Task, "priority" | "title">) => {
         setTasks((prev) => [
             ...prev,
-            { id: new Date(), priority: value.priority, title: value.title },
+            { id: selectedDay, priority: values.priority, title: values.title },
         ]);
     };
     console.log(tasks, "tasks");
@@ -76,7 +79,11 @@ const Calendar: React.FC<CalendarProps> = () => {
                 {daysToRender.map((day, index) => (
                     <Days key={index} day={day} />
                 ))}
-                <Cells onShowModal={onShowModal} currentDate={currentDate} />
+                <Cells
+                    tasks={tasks}
+                    onShowModal={onShowModal}
+                    currentDate={currentDate}
+                />
             </CalendarWrapper>
             {isTaskModal && (
                 <TaskModal

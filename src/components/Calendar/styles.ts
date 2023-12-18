@@ -61,13 +61,15 @@ export const Day = styled("div")`
     border-bottom: 1px solid rgba(166, 168, 179, 0.12);
     border-right: 1px solid rgba(166, 168, 179, 0.12);
     text-align: right;
-    padding: 14px 20px;
+     padding:0 5px ;
     letter-spacing: 1px;
     font-size: 12px;
     box-sizing: border-box;
     color: #98a0a6;
     position: relative;
     z-index: 1;
+    overflow-x: auto;
+    
 
     &:nth-of-type(7n + 7) {
         border-right: 0;
