@@ -6,12 +6,12 @@ import { Button, TextareaAutosize, css } from "@mui/material";
 import Compact from "react-color/lib/components/compact/Compact";
 import { ColorResult } from "react-color";
 import Labels from "../Calendar/Labels";
-import { Task } from "../Calendar/Calendar";
+import { TaskType } from "../Calendar/Calendar";
 
 interface IProps {
     isOpen: boolean;
     onClose?: () => void;
-    holdTask: (values: Pick<Task, "priority" | "title">) => void;
+    holdTask: (values: Pick<TaskType, "priority" | "title">) => void;
 }
 
 const TaskModal = ({ isOpen, onClose, holdTask }: IProps) => {
@@ -33,7 +33,6 @@ const TaskModal = ({ isOpen, onClose, holdTask }: IProps) => {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         holdTask({ priority: colors, title: task });
-        console.log(colors, task, "value");
         onClose && onClose();
     };
 

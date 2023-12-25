@@ -4,8 +4,8 @@ interface IProps {
     day: string;
 }
 
-function Days({ day }: IProps) {
+function WeekDays({ day }: IProps) {
     return <span css={daysName}>{day}</span>;
 }
 
-export default Days;
+export default WeekDays;

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import {
     format,
     addMonths,
@@ -8,12 +8,11 @@ import {
     startOfWeek,
 } from "date-fns";
 import { CalendarHeader } from "./CalendarHeader";
-import Days from "./Days";
+import WeekDays from "./WeekDays";
 import Cells from "./Cells";
 import styled from "@emotion/styled";
-import TaskModal from "../TaskModal/TaskModal";
 
-export interface Task {
+export interface TaskType {
     id: Date;
     title?: string;
     priority?: string[];
@@ -26,18 +25,6 @@ interface CalendarProps {
 
 const Calendar: React.FC<CalendarProps> = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [isTaskModal, setIsTaskModal] = useState<boolean>(false);
-    const [tasks, setTasks] = useState<Task[]>([]);
-    const [selectedDay, setSelectedDay] = useState<Date>(currentDate);
-
-    const onCloseModal = useCallback(() => {
-        setIsTaskModal(false);
-    }, []);
-
-    const onShowModal = useCallback((day: Date) => {
-        setSelectedDay(day);
-        setIsTaskModal(true);
-    }, []);
 
     const nextMonth = () => {
         setCurrentDate((prevDate) => addMonths(prevDate, 1));
@@ -61,13 +48,8 @@ const Calendar: React.FC<CalendarProps> = () => {
 
     const daysToRender = renderDays();
 
-    const holdaTask = (values: Pick<Task, "priority" | "title">) => {
-        setTasks((prev) => [
-            ...prev,
-            { id: selectedDay, priority: values.priority, title: values.title },
-        ]);
-    };
-    console.log(tasks, "tasks");
+    console.log("calendar");
+
     return (
         <Container>
             <CalendarHeader
@@ -77,21 +59,10 @@ const Calendar: React.FC<CalendarProps> = () => {
             />
             <CalendarWrapper>
                 {daysToRender.map((day, index) => (
-                    <Days key={index} day={day} />
+                    <WeekDays key={index} day={day} />
                 ))}
-                <Cells
-                    tasks={tasks}
-                    onShowModal={onShowModal}
-                    currentDate={currentDate}
-                />
+                <Cells currentDate={currentDate} />
             </CalendarWrapper>
-            {isTaskModal && (
-                <TaskModal
-                    holdTask={holdaTask}
-                    isOpen={isTaskModal}
-                    onClose={onCloseModal}
-                />
-            )}
         </Container>
     );
 };
@@ -107,11 +78,10 @@ export const CalendarWrapper = styled("div")`
     overflow: auto;
 `;
 export const Container = styled.div`
-    width: 90%;
+    width: 95%;
     margin: auto;
     overflow: hidden;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     background: #fff;
-    max-width: 1200px;
 `;

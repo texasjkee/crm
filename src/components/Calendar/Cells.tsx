@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-    addDays,
+    eachDayOfInterval,
     endOfMonth,
     endOfWeek,
-    format,
     isSameDay,
     isSameMonth,
     startOfMonth,
@@ -11,78 +10,111 @@ import {
 } from "date-fns";
 import { memo } from "react";
 import { css } from "@emotion/react";
-import { Day } from "./styles";
 import Icon from "./../../assets/svg/disabled.svg";
-import { Task } from "./Calendar";
-import Labels from "./Labels";
-import styled from "@emotion/styled";
-import IconButton from "@mui/material/IconButton/IconButton";
-import AddIcon from "@mui/icons-material/Add";
-import { Paper } from "@mui/material";
+
+import Day from "./Day";
+import { DayContainer } from "./styles";
+import { TaskType } from "./Calendar";
+import Task from "./Task";
+import TaskModal from "../TaskModal/TaskModal";
 
 interface IProps {
-    currentDate: number | Date;
-    onShowModal: (day: Date) => void;
-    tasks: Task[];
+    currentDate: Date;
 }
-const Cells = memo(function Cells({ currentDate, onShowModal, tasks }: IProps) {
-    const dateFormat = "d";
+export interface DayWithTask {
+    day: Date;
+    tasks?: TaskType[];
+}
+
+const Cells = memo(function Cells({ currentDate }: IProps) {
+    const [days, setDays] = useState<DayWithTask[]>([]);
+    const [tasks, setTasks] = useState<TaskType[]>([]);
+    const [isTaskModal, setIsTaskModal] = useState<boolean>(false);
+    const [selectedDay, setSelectedDay] = useState<Date>(currentDate);
+    // const [number, setNumber] = useState(0);
     const monthStart = startOfMonth(currentDate);
     const monthEnd = endOfMonth(currentDate);
-    const startDate = startOfWeek(monthStart);
-    const endDate = endOfWeek(monthEnd);
+    const startOfCalendar = startOfWeek(monthStart, {
+        weekStartsOn: 0,
+    });
+    const endOfCalendar = endOfWeek(monthEnd, { weekStartsOn: 0 });
+    const cells = eachDayOfInterval({
+        start: startOfCalendar,
+        end: endOfCalendar,
+    });
 
-    const days = [];
-    let day = startDate;
+    const onCloseModal = useCallback(() => {
+        setIsTaskModal(false);
+    }, []);
 
-    while (day <= endDate) {
-        for (let i = 0; i < 7; i++) {
-            days.push({ day });
+    const holdaTask = (values: Pick<TaskType, "priority" | "title">) => {
+        setTasks((prevTasks) => [
+            ...prevTasks,
+            { id: selectedDay, priority: values.priority, title: values.title },
+        ]);
+    };
 
-            day = addDays(day, 1);
-        }
-    }
+    const onShowModal = useCallback((day: Date) => {
+        setSelectedDay(day);
+        setIsTaskModal(true);
+    }, []);
+
+    const calculate = useMemo(() => {
+        console.log("Calculating memoizedDays");
+        const result = cells.map((item) => ({
+            day: item,
+            tasks: tasks.filter((task) => isSameDay(new Date(task.id), item)),
+        }));
+
+        return result;
+    }, [cells, tasks]);
+
+    const checkIfSameMonth = (combinedItem: DayWithTask) => {
+        return !isSameMonth(new Date(combinedItem.day), monthStart)
+            ? dayStyle.disabled
+            : isSameDay(combinedItem.day, new Date())
+              ? dayStyle.selected
+              : "";
+    };
+
+    const handleReorder = (newOrder: unknown[]) => {
+        console.log(newOrder, "newOrder");
+        const typedTasks = newOrder as TaskType[];
+        setTasks(typedTasks);
+    };
+
+    useEffect(() => {
+        setDays(calculate);
+        console.log("useEffect triggered");
+        // setNumber(number + 1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tasks, currentDate]);
+    // console.log(number, "cells");
 
     return (
         <>
-            {days.map((item) => (
-                <Day
-                    css={
-                        !isSameMonth(new Date(item.day), monthStart)
-                            ? dayStyle.disabled
-                            : isSameDay(item.day, new Date())
-                              ? dayStyle.selected
-                              : ""
-                    }
-                    key={item.day.toString()}
+            {days.map((day) => (
+                <DayContainer
+                    axis='y'
+                    values={tasks}
+                    onReorder={handleReorder}
+                    css={checkIfSameMonth(day)}
+                    key={day.day.toString()}
                 >
-                    <div css={addContainer}>
-                        <IconButton
-                            onClick={() => onShowModal(item.day)}
-                            color='primary'
-                            aria-label='add to shopping cart'
-                        >
-                            <AddIcon />
-                        </IconButton>
-                        <div>
-                            <span>{format(item.day, dateFormat)}</span>
-                        </div>
-                    </div>
-
-                    {!!tasks &&
-                        tasks.map((task, index) => {
-                            if (isSameDay(new Date(task.id), item.day)) {
-                                return (
-                                    <TasksContainer key={index}>
-                                        <Labels colors={task.priority ?? []} />
-                                        <span>{task.title}</span>
-                                    </TasksContainer>
-                                );
-                            }
-                            return null;
-                        })}
-                </Day>
+                    <Day item={day} onShowModal={onShowModal} />
+                    {!!day.tasks &&
+                        day.tasks.map((task, index) => (
+                            <Task key={index} task={task} />
+                        ))}
+                </DayContainer>
             ))}
+            {isTaskModal && (
+                <TaskModal
+                    holdTask={holdaTask}
+                    isOpen={isTaskModal}
+                    onClose={onCloseModal}
+                />
+            )}
         </>
     );
 });
@@ -99,17 +131,3 @@ export const dayStyle = {
         backgroundColor: "var(--grey, 0.6)",
     }),
 };
-const TasksContainer = styled(Paper)`
-    display: flex;
-    flex-direction: column;
-    padding: 0 10px 10px 10px;
-    margin-bottom: 5px;
-    & span {
-        text-align: left;
-    }
-`;
-const addContainer = css`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-`;

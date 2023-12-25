@@ -16,6 +16,7 @@
 		"@typescript-eslint/eslint-plugin": "^6.13.2",
 		"@typescript-eslint/parser": "^6.13.2",
 		"customize-cra": "^1.0.0",
+		"framer-motion": "^10.16.16",
 		"react": "^18.2.0",
 		"react-app-rewired": "^2.2.1",
 		"react-dom": "^18.2.0",

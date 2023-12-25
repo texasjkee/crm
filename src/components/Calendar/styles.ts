@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { Reorder } from "framer-motion";
 
 export const DaysContainer = css`
     display: flex;
@@ -57,7 +58,7 @@ export const WeekContainer = styled("div")`
     text-align: center;
 `;
 
-export const Day = styled("div")`
+export const DayContainer = styled(Reorder.Group)`
     border-bottom: 1px solid rgba(166, 168, 179, 0.12);
     border-right: 1px solid rgba(166, 168, 179, 0.12);
     text-align: right;
