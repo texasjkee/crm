@@ -1,20 +1,20 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import FormControl from "@mui/material/FormControl";
 import styled from "@emotion/styled";
-import MUIModal from "../../styles/ui/MUIModal/MUIModal";
 import { Button, TextareaAutosize, css } from "@mui/material";
 import Compact from "react-color/lib/components/compact/Compact";
 import { ColorResult } from "react-color";
 import Labels from "../Calendar/Labels";
 import { TaskType } from "../Calendar/Calendar";
+import MUIModal, { ModalSize } from "./../../styles/ui/MUIModal/MUIModal";
 
-interface IProps {
+export interface TaskModalProps {
     isOpen: boolean;
     onClose?: () => void;
     holdTask: (values: Pick<TaskType, "priority" | "title">) => void;
 }
 
-const TaskModal = ({ isOpen, onClose, holdTask }: IProps) => {
+const TaskModal = ({ isOpen, onClose, holdTask }: TaskModalProps) => {
     const [colors, setColor] = useState<string[]>([]);
     const [task, setTask] = useState<string>("");
 
@@ -40,7 +40,7 @@ const TaskModal = ({ isOpen, onClose, holdTask }: IProps) => {
         setTask(e?.currentTarget.value);
 
     return (
-        <MUIModal isOpen={isOpen} onClose={onClose}>
+        <MUIModal width={ModalSize.SMALL} isOpen={isOpen} onClose={onClose}>
             <TaskForm onSubmit={handleSubmit}>
                 <FormControl>
                     <h1>Priority</h1>

@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+    Suspense,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from "react";
 import {
     eachDayOfInterval,
     endOfMonth,
@@ -86,10 +92,8 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
     useEffect(() => {
         setDays(calculate);
         console.log("useEffect triggered");
-        // setNumber(number + 1);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tasks, currentDate]);
-    // console.log(number, "cells");
 
     return (
         <>
@@ -109,11 +113,13 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
                 </DayContainer>
             ))}
             {isTaskModal && (
-                <TaskModal
-                    holdTask={holdaTask}
-                    isOpen={isTaskModal}
-                    onClose={onCloseModal}
-                />
+                <Suspense fallback={""}>
+                    <TaskModal
+                        holdTask={holdaTask}
+                        isOpen={isTaskModal}
+                        onClose={onCloseModal}
+                    />
+                </Suspense>
             )}
         </>
     );
