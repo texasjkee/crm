@@ -1,12 +1,12 @@
 import { format } from "date-fns";
 import { memo } from "react";
-import { ButtonGray } from "../../styles/ui";
 import {
     ButtonContainer,
     HeaderContainer,
     arrowDownStyle,
     arrowUpStyle,
 } from "./styles";
+import { ButtonGray } from "../common/ui";
 
 interface IProps {
     prevMonth: () => void;
@@ -33,10 +33,18 @@ export const CalendarHeader = memo(function CalendarHeader({
             <h5>{format(currentDate, headerDateFormat)}</h5>
             <div>
                 <ButtonContainer>
-                    <ButtonGray onClick={() => console.log("week")}>
+                    <ButtonGray
+                        onClick={() => {
+                            console.log("week");
+                        }}
+                    >
                         Week
                     </ButtonGray>
-                    <ButtonGray onClick={() => console.log("day")}>
+                    <ButtonGray
+                        onClick={() => {
+                            console.log("day");
+                        }}
+                    >
                         Day
                     </ButtonGray>
                 </ButtonContainer>

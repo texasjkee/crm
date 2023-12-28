@@ -22,18 +22,6 @@
 		"types": [
 			"@emotion/react/types/css-prop"
 		],
-		"baseUrl": ".",
-		"paths": {
-			"@": [
-				"./src"
-			],
-			"@/*": [
-				"./src/*"
-			],
-			"@components": [
-				"./src/components"
-			]
-		}
 	},
 	"include": [
 		"src"

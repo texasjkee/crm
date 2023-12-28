@@ -33,7 +33,7 @@ module.exports = {
         "@typescript-eslint",
     ],
     rules: {
-        "prettier/prettier": "error",
+        "@typescript-eslint/no-unused-vars": ["error"],
         "react/no-unknown-property": ["error", { ignore: ["css"] }],
         "linebreak-style": "off",
         "react/jsx-indent": [2, 4],

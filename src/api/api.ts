@@ -1,6 +1,6 @@
-import { FormType } from "@/components/LoginForm/LoginForm";
-import { USER_LOCALSTORAGE_KEY } from "@/const/localStorage";
-import axios, { AxiosResponse } from "axios";
+import axios, { type AxiosResponse } from "axios";
+import { USER_LOCALSTORAGE_KEY } from "../const/localStorage";
+import { type FormType } from "../components/LoginForm/LoginForm";
 
 export const $api = axios.create({
     baseURL: "http://localhost:3001",
@@ -10,10 +10,10 @@ export const $api = axios.create({
 });
 
 export const AUTH = {
-    signUp(values: FormType): Promise<AxiosResponse<FormType>> {
-        return $api.post(`/auth/signup/`, values);
+    async signUp(values: FormType): Promise<AxiosResponse<FormType>> {
+        return await $api.post(`/auth/signup/`, values);
     },
-    login(values: FormType): Promise<AxiosResponse<FormType>> {
-        return $api.post(`/auth/login/`, values);
+    async login(values: FormType): Promise<AxiosResponse<FormType>> {
+        return await $api.post(`/auth/login/`, values);
     },
 };

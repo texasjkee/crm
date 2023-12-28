@@ -1,8 +1,14 @@
-import React from "react";
+import React, { memo } from "react";
 import { useFormik } from "formik";
 import { validateSchema } from "./validationSchema";
-import { Button, TextField } from "@mui/material";
+import { Alert, Button, Link, TextField } from "@mui/material";
 import styled from "@emotion/styled";
+import Modal, { ModalSize } from "../common/ui/MUIModal/Modal";
+import { useSelector } from "react-redux";
+import { getLoginError } from "../../store/slices/user/selectors.ts/getLoginErrors";
+import { css } from "@emotion/react";
+import SnackBar from "../common/ui/SnackBar/SnackBar";
+import { SEVERITY } from "../../const/enums";
 
 export interface FormType {
     email: string;
@@ -13,9 +19,15 @@ export interface FormType {
 export interface LoginFormProps {
     handleSubmit: (values: FormType) => void;
     singUp?: boolean;
+    isOpen: boolean;
+    onClose: () => void;
+    title: string;
+    setSignUp: () => void;
 }
 
-function LoginForm({ handleSubmit, singUp }: LoginFormProps) {
+const LoginForm = memo(function LoginForm(props: LoginFormProps) {
+    const { handleSubmit, singUp, isOpen, onClose, title, setSignUp } = props;
+    const error = useSelector(getLoginError);
     const formik = useFormik({
         initialValues: {
             email: "",
@@ -29,7 +41,12 @@ function LoginForm({ handleSubmit, singUp }: LoginFormProps) {
     });
 
     return (
-        <>
+        <Modal
+            title={title}
+            width={ModalSize.SMALL}
+            isOpen={isOpen}
+            onClose={onClose}
+        >
             <Form onSubmit={formik.handleSubmit}>
                 <TextField
                     fullWidth
@@ -79,7 +96,7 @@ function LoginForm({ handleSubmit, singUp }: LoginFormProps) {
                         }
                     />
                 )}
-
+                {error && <Alert severity={SEVERITY.ERROR}>{error}</Alert>}
                 <Button
                     color='primary'
                     variant='contained'
@@ -88,16 +105,26 @@ function LoginForm({ handleSubmit, singUp }: LoginFormProps) {
                 >
                     Submit
                 </Button>
+                <div
+                    css={css`
+                        float: right;
+                    `}
+                >
+                    <Link href={"#"} onClick={setSignUp}>
+                        {singUp ? "Login" : "Sign up"}
+                    </Link>
+                </div>
+                <SnackBar message={error} isOpen={!!error} />
             </Form>
-        </>
+        </Modal>
     );
-}
+});
 
 export default LoginForm;
 
 const Form = styled("form")`
-    padding: 10px;
-    & div {
+    & div,
+    Button {
         margin-bottom: 10px;
     }
 `;

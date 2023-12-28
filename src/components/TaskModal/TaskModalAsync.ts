@@ -1,6 +1,6 @@
-import { FC, lazy } from "react";
-import { TaskModalProps } from "./TaskModal";
+import { type FC, lazy } from "react";
+import { type TaskModalProps } from "./TaskModal";
 
-export const LoginFormAsync = lazy<FC<TaskModalProps>>(
+export const TaskModalAsync = lazy<FC<TaskModalProps>>(
     async () => await import("./TaskModal")
 );

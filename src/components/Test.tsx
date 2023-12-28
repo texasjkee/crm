@@ -39,13 +39,17 @@ const Test = () => {
         <div className='calendar'>
             <div className='calendar-header'>
                 <button
-                    onClick={() => setCurrentDate(subMonths(currentDate, 1))}
+                    onClick={() => {
+                        setCurrentDate(subMonths(currentDate, 1));
+                    }}
                 >
                     Previous Month
                 </button>
                 <h2>{format(currentDate, "MMMM yyyy")}</h2>
                 <button
-                    onClick={() => setCurrentDate(addMonths(currentDate, 1))}
+                    onClick={() => {
+                        setCurrentDate(addMonths(currentDate, 1));
+                    }}
                 >
                     Next Month
                 </button>

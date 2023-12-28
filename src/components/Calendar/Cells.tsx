@@ -4,6 +4,7 @@ import React, {
     useEffect,
     useMemo,
     useState,
+    memo,
 } from "react";
 import {
     eachDayOfInterval,
@@ -14,15 +15,15 @@ import {
     startOfMonth,
     startOfWeek,
 } from "date-fns";
-import { memo } from "react";
+
 import { css } from "@emotion/react";
 import Icon from "./../../assets/svg/disabled.svg";
 
 import Day from "./Day";
 import { DayContainer } from "./styles";
-import { TaskType } from "./Calendar";
+import { type TaskType } from "./Calendar";
 import Task from "./Task";
-import TaskModal from "../TaskModal/TaskModal";
+import { TaskModalAsync } from "../TaskModal/TaskModalAsync";
 
 interface IProps {
     currentDate: Date;
@@ -66,7 +67,6 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
     }, []);
 
     const calculate = useMemo(() => {
-        console.log("Calculating memoizedDays");
         const result = cells.map((item) => ({
             day: item,
             tasks: tasks.filter((task) => isSameDay(new Date(task.id), item)),
@@ -84,14 +84,12 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
     };
 
     const handleReorder = (newOrder: unknown[]) => {
-        console.log(newOrder, "newOrder");
         const typedTasks = newOrder as TaskType[];
         setTasks(typedTasks);
     };
 
     useEffect(() => {
         setDays(calculate);
-        console.log("useEffect triggered");
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tasks, currentDate]);
 
@@ -112,15 +110,14 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
                         ))}
                 </DayContainer>
             ))}
-            {isTaskModal && (
-                <Suspense fallback={""}>
-                    <TaskModal
-                        holdTask={holdaTask}
-                        isOpen={isTaskModal}
-                        onClose={onCloseModal}
-                    />
-                </Suspense>
-            )}
+
+            <Suspense fallback={""}>
+                <TaskModalAsync
+                    holdTask={holdaTask}
+                    isOpen={isTaskModal}
+                    onClose={onCloseModal}
+                />
+            </Suspense>
         </>
     );
 });

@@ -1,12 +1,12 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { type ChangeEvent, type FormEvent, useState } from "react";
 import FormControl from "@mui/material/FormControl";
 import styled from "@emotion/styled";
 import { Button, TextareaAutosize, css } from "@mui/material";
 import Compact from "react-color/lib/components/compact/Compact";
-import { ColorResult } from "react-color";
+import { type ColorResult } from "react-color";
 import Labels from "../Calendar/Labels";
-import { TaskType } from "../Calendar/Calendar";
-import MUIModal, { ModalSize } from "./../../styles/ui/MUIModal/MUIModal";
+import { type TaskType } from "../Calendar/Calendar";
+import Modal, { ModalSize } from "../common/ui/MUIModal/Modal";
 
 export interface TaskModalProps {
     isOpen: boolean;
@@ -24,7 +24,7 @@ const TaskModal = ({ isOpen, onClose, holdTask }: TaskModalProps) => {
 
     const deleteHandler = React.useCallback(
         (color: string) => {
-            const filteredColors = colors.filter((item) => item != color);
+            const filteredColors = colors.filter((item) => item !== color);
             setColor(filteredColors);
         },
         [colors]
@@ -36,11 +36,17 @@ const TaskModal = ({ isOpen, onClose, holdTask }: TaskModalProps) => {
         onClose && onClose();
     };
 
-    const onChangeTextArea = (e: ChangeEvent<HTMLTextAreaElement>) =>
+    const onChangeTextArea = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setTask(e?.currentTarget.value);
+    };
 
     return (
-        <MUIModal width={ModalSize.SMALL} isOpen={isOpen} onClose={onClose}>
+        <Modal
+            title={"Add task"}
+            width={ModalSize.MEDIUM}
+            isOpen={isOpen}
+            onClose={onClose}
+        >
             <TaskForm onSubmit={handleSubmit}>
                 <FormControl>
                     <h1>Priority</h1>
@@ -65,7 +71,7 @@ const TaskModal = ({ isOpen, onClose, holdTask }: TaskModalProps) => {
                     />
                     <div css={buttonWrapper}>
                         <Button
-                            disabled={task.length == 0}
+                            disabled={task.length === 0}
                             type='submit'
                             variant='outlined'
                         >
@@ -74,7 +80,7 @@ const TaskModal = ({ isOpen, onClose, holdTask }: TaskModalProps) => {
                     </div>
                 </FormControl>
             </TaskForm>
-        </MUIModal>
+        </Modal>
     );
 };
 

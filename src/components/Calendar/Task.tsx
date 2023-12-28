@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Paper } from "@mui/material";
 import { memo } from "react";
 import Labels from "./Labels";
-import { TaskType } from "./Calendar";
+import { type TaskType } from "./Calendar";
 import { Reorder } from "framer-motion";
 
 interface IProp {

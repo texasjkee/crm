@@ -25,7 +25,11 @@ const Labels = memo(function Labels({ colors, deleteHandler }: LabelsProps) {
                     key={index}
                 >
                     {!!deleteHandler && (
-                        <DeleteButton onClick={() => onDelete(item)} />
+                        <DeleteButton
+                            onClick={() => {
+                                onDelete(item);
+                            }}
+                        />
                     )}
                     <LineIcon
                         css={css`

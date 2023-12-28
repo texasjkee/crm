@@ -3,7 +3,7 @@ import { IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { format } from "date-fns";
 import { memo } from "react";
-import { DayWithTask } from "./Cells";
+import { type DayWithTask } from "./Cells";
 
 interface IProps {
     // item: Record<string, Date>;
@@ -16,7 +16,9 @@ const Day = memo(function Day({ item, onShowModal }: IProps) {
     return (
         <div css={addContainer}>
             <IconButton
-                onClick={() => onShowModal(item.day)}
+                onClick={() => {
+                    onShowModal(item.day);
+                }}
                 color='primary'
                 aria-label='add to shopping cart'
             >
