@@ -6,7 +6,7 @@ import Compact from "react-color/lib/components/compact/Compact";
 import { type ColorResult } from "react-color";
 import Labels from "../Calendar/Labels";
 import { type TaskType } from "../Calendar/Calendar";
-import Modal, { ModalSize } from "../common/ui/MUIModal/Modal";
+import Modal, { ModalSize } from "../common/ui/Modal/Modal";
 
 export interface TaskModalProps {
     isOpen: boolean;

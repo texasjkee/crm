@@ -1,6 +1,6 @@
 import axios, { type AxiosResponse } from "axios";
 import { USER_LOCALSTORAGE_KEY } from "../const/localStorage";
-import { type FormType } from "../components/LoginForm/LoginForm";
+import { FormType } from "../components/LoginForm/LoginForm";
 
 export const $api = axios.create({
     baseURL: "http://localhost:3001",

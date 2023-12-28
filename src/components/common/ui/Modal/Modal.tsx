@@ -1,124 +1,77 @@
-import React from "react";
-import {
-    useState,
-    type ReactNode,
-    useRef,
-    useEffect,
-    useCallback,
-} from "react";
-// import Portal from "../Portal/Portal";
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
+import * as React from "react";
+import { type ReactNode } from "react";
+import Dialog from "@mui/material/Dialog";
+import { DialogContent, DialogTitle, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
+const style = {
+    position: "absolute" as const,
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "100%",
+    maxWidth: "60%",
+    background: "var(--primary-dark-white)",
+    borderRadius: "12px",
+    boxShadow: 24,
+    p: 2,
+};
+
+export enum ModalSize {
+    SMALL = "300px",
+    MEDIUM = "500px",
+    LARGE = "800px",
+}
 
 export interface ModalProps {
-    className?: string;
     children?: ReactNode;
     isOpen?: boolean;
     onClose?: () => void;
+    width?: ModalSize;
     lazy?: boolean;
+    title: string;
 }
-const ANIMATION_DELAY = 300;
 
-export const Modal: React.FC<ModalProps> = (props): JSX.Element => {
-    const { children, isOpen, onClose, lazy } = props;
-    const [isClosing, setIsClosing] = useState(false);
-    const [isMounted, setIsMounted] = useState(false);
+export default function Modal(props: ModalProps) {
+    const { children, isOpen, onClose, width, title } = props;
 
-    useEffect(() => {
-        if (isOpen) {
-            setIsMounted(true);
-        }
-    }, [isOpen]);
-
-    console.log(isClosing, "isclosing");
-    const timeRef = useRef<ReturnType<typeof setTimeout>>();
-
-    const closeHandler = useCallback((): void => {
-        if (onClose) {
-            setIsClosing(true);
-            timeRef.current = setTimeout(() => {
-                onClose();
-                setIsClosing(false);
-            }, ANIMATION_DELAY);
-        }
-    }, [onClose]);
-    const onContentClick = (e: React.MouseEvent): void => {
-        e.stopPropagation();
+    const customStyle = {
+        maxWidth: width ?? style.maxWidth,
     };
 
-    const onKeyDown = useCallback(
-        (e: KeyboardEvent): void => {
-            if (e.key === "Escape") {
-                closeHandler();
-            }
-        },
-        [closeHandler]
-    );
-
-    useEffect(() => {
-        if (isOpen) {
-            window.addEventListener("keydown", onKeyDown);
-        }
-        return () => {
-            clearTimeout(timeRef.current);
-            window.removeEventListener("keydown", onKeyDown);
-        };
-    }, [isOpen, onKeyDown]);
-
-    if (lazy && !isMounted) {
-        return <></>;
-    }
-
-    const addStyles = () =>
-        isOpen ? cls.opened : isClosing ? cls.isClosing : "";
     return (
-        // <Portal>
-        <ModalContainer css={addStyles}>
-            <div css={cls.overlay} onClick={closeHandler}>
-                <div css={cls.content} onClick={onContentClick}>
+        <>
+            <Dialog
+                open={isOpen ?? false}
+                onClose={onClose}
+                aria-labelledby='keep-mounted-modal-title'
+                aria-describedby='keep-mounted-modal-description'
+            >
+                <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
+                    {title}
+                </DialogTitle>
+                <IconButton
+                    aria-label='close'
+                    onClick={onClose}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+                <DialogContent sx={customStyle} dividers>
                     {children}
-                </div>
-            </div>
-        </ModalContainer>
-        // </Portal>
+                </DialogContent>
+            </Dialog>
+        </>
     );
-};
+}
 
-const cls = {
-    overlay: css({
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-        height: "100%",
-        background: "var(--overlay-color)",
-    }),
-    content: css({
-        maxWidth: "60%",
-        padding: "20px",
-        background: "var(--primary-dark-white)",
-        borderRadius: "12px",
-        transform: "scale(0.5)",
-        transition: "0.3s transform",
-    }),
-    opened: css({
-        zIndex: "var(--modal-z-index)",
-        opacity: "1",
-        pointerEvents: "auto",
-        "& .content": {
-            transform: "scale(1)",
-        },
-    }),
-    isClosing: css({
-        "& .content": {
-            transform: "scale(0.2)",
-        },
-    }),
-};
-const ModalContainer = styled.div`
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    opacity: 0;
-    pointer-events: none;
-`;
+// const IconContainer = styled("div")`
+//     margin-bottom: 10px;
+//     height: auto;
+//     float: right;
+// `;

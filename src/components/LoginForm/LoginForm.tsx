@@ -1,13 +1,10 @@
 import React, { memo } from "react";
-import { useFormik } from "formik";
-import { validateSchema } from "./validationSchema";
-import { Alert, Button, Link, TextField } from "@mui/material";
-import styled from "@emotion/styled";
-import Modal, { ModalSize } from "../common/ui/MUIModal/Modal";
-import { useSelector } from "react-redux";
-import { getLoginError } from "../../store/slices/user/selectors.ts/getLoginErrors";
+import { useForm } from "react-hook-form";
+import { validationSchema } from "./validationSchema";
+import { Button, TextField, styled, Link, Alert } from "@mui/material";
+import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 import { css } from "@emotion/react";
-import SnackBar from "../common/ui/SnackBar/SnackBar";
+import Modal, { ModalSize } from "../common/ui/Modal/Modal";
 import { SEVERITY } from "../../const/enums";
 
 export interface FormType {
@@ -18,28 +15,37 @@ export interface FormType {
 
 export interface LoginFormProps {
     handleSubmit: (values: FormType) => void;
-    singUp?: boolean;
+    signUp?: boolean;
     isOpen: boolean;
     onClose: () => void;
     title: string;
     setSignUp: () => void;
+    error?: string;
 }
 
 const LoginForm = memo(function LoginForm(props: LoginFormProps) {
-    const { handleSubmit, singUp, isOpen, onClose, title, setSignUp } = props;
-    const error = useSelector(getLoginError);
-    const formik = useFormik({
-        initialValues: {
-            email: "",
-            password: "",
-            confirmPassword: "",
-        },
-        validationSchema: validateSchema,
-        onSubmit: (values: FormType) => {
-            handleSubmit(values);
-        },
-    });
+    const {
+        handleSubmit: onHandleSubmit,
+        signUp,
+        isOpen,
+        onClose,
+        title,
+        setSignUp,
+        error,
+    } = props;
 
+    const resolver = useYupValidationResolver(validationSchema);
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormType>({ resolver });
+    const onSubmit = handleSubmit((data) => onHandleSubmit(data));
+
+    const isSignUp = signUp ? "Login" : "Sign up";
+    const isLogin = !signUp ? "Login" : "Sign up";
+
+    console.log("react hook form rerender");
     return (
         <Modal
             title={title}
@@ -47,54 +53,36 @@ const LoginForm = memo(function LoginForm(props: LoginFormProps) {
             isOpen={isOpen}
             onClose={onClose}
         >
-            <Form onSubmit={formik.handleSubmit}>
+            <Form onSubmit={onSubmit}>
                 <TextField
-                    fullWidth
-                    id='email'
-                    name='email'
                     label='Email'
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email && formik.errors.email}
+                    fullWidth
+                    error={Boolean(errors.email)}
+                    helperText={errors.email && errors.email.message}
+                    {...register("email")}
                 />
                 <TextField
                     fullWidth
-                    id='password'
-                    name='password'
                     label='Password'
                     type='password'
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={
-                        formik.touched.password &&
-                        Boolean(formik.errors.password)
-                    }
-                    helperText={
-                        formik.touched.password && formik.errors.password
-                    }
+                    error={Boolean(errors.password)}
+                    helperText={errors.password && errors.password.message}
+                    {...register("password")}
                 />
-                {singUp && (
-                    <TextField
-                        fullWidth
-                        id='confirmPassword'
-                        name='confirmPassword'
-                        label='Confirm Password'
-                        type='password'
-                        value={formik.values.confirmPassword}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        error={
-                            formik.touched.confirmPassword &&
-                            Boolean(formik.errors.confirmPassword)
-                        }
-                        helperText={
-                            formik.touched.confirmPassword &&
-                            formik.errors.confirmPassword
-                        }
-                    />
+                {signUp && (
+                    <>
+                        <TextField
+                            label='Confirm Password'
+                            fullWidth
+                            type='password'
+                            error={Boolean(errors.confirmPassword)}
+                            helperText={
+                                errors.confirmPassword &&
+                                errors.confirmPassword.message
+                            }
+                            {...register("confirmPassword")}
+                        />
+                    </>
                 )}
                 {error && <Alert severity={SEVERITY.ERROR}>{error}</Alert>}
                 <Button
@@ -103,7 +91,7 @@ const LoginForm = memo(function LoginForm(props: LoginFormProps) {
                     fullWidth
                     type='submit'
                 >
-                    Submit
+                    {isLogin}
                 </Button>
                 <div
                     css={css`
@@ -111,20 +99,17 @@ const LoginForm = memo(function LoginForm(props: LoginFormProps) {
                     `}
                 >
                     <Link href={"#"} onClick={setSignUp}>
-                        {singUp ? "Login" : "Sign up"}
+                        {isSignUp}
                     </Link>
                 </div>
-                <SnackBar message={error} isOpen={!!error} />
             </Form>
         </Modal>
     );
 });
 
 export default LoginForm;
-
-const Form = styled("form")`
-    & div,
-    Button {
-        margin-bottom: 10px;
-    }
-`;
+const Form = styled("form")({
+    "& div, Button": {
+        marginBottom: 10,
+    },
+});

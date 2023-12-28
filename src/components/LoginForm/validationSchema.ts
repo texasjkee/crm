@@ -2,7 +2,7 @@ import * as Yup from "yup";
 
 const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
 
-export const validateSchema = Yup.object().shape({
+export const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Required"),
     password: Yup.string()
         .matches(passwordRules, {
