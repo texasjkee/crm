@@ -4,20 +4,45 @@ import { FormType } from "./LoginForm";
 
 const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
 
+const errorMessages = {
+    email: {
+        required: "Email is required",
+        invalid: "Invalid email",
+    },
+    password: {
+        required: "Password is required",
+        weak: "Please create a stronger password",
+    },
+    confirmPassword: {
+        required: "Confirm password must be required",
+        mismatch: "Your passwords do not match",
+    },
+};
+
 export const validationSchema: ObjectSchema<FormType> = Yup.object().shape({
-    email: Yup.string().email("Invalid email").required("Required"),
+    email: Yup.string()
+        .email(errorMessages.email.invalid)
+        .required(errorMessages.email.required),
     password: Yup.string()
-        .matches(passwordRules, {
-            message: "Please create a stronger password",
-        })
-        .required("Required"),
-    isConfirm: boolean().required(),
-    confirmPassword: Yup.string()
+        .required(errorMessages.password.required)
         .when("isConfirm", {
-            is: true,
+            is: (value: boolean) => value,
             then: (schema) =>
-                schema.required("Confirm password must be required"),
-        })
-        .oneOf([Yup.ref("password"), undefined], "Passwords must match")
-        .required("Required"),
+                schema.matches(passwordRules, {
+                    message: errorMessages.password.weak,
+                }),
+            otherwise: () => Yup.string(),
+        }),
+    isConfirm: boolean().required(),
+    confirmPassword: Yup.string().when("isConfirm", {
+        is: (value: boolean) => value,
+        then: (schema) =>
+            schema
+                .required(errorMessages.confirmPassword.required)
+                .oneOf(
+                    [Yup.ref("password")],
+                    errorMessages.confirmPassword.mismatch
+                ),
+        otherwise: () => Yup.string(),
+    }),
 });

@@ -6,14 +6,12 @@ import { getUserAuthData } from "../../store/slices/user/selectors.ts/getAuthDat
 import { useDispatch, useSelector } from "react-redux";
 import LoginModal from "../LoginModal/LoginModal";
 import { userActions } from "../../store/slices/user/userSlice";
-import { getIsSignUp } from "../../store/slices/user/selectors.ts/getIsSignUp";
 
 function Header() {
     const [isOpen, setIsopen] = useState(false);
     const dispatch = useDispatch();
 
     const authData = useSelector(getUserAuthData);
-    const isSignUp = useSelector(getIsSignUp);
 
     const onCloseModal = () => {
         setIsopen(false);
@@ -28,7 +26,6 @@ function Header() {
         dispatch(userActions.logout());
     };
 
-    const holdTitle = isSignUp ? "Sign up" : "Enter";
     console.log("header rerender");
     return (
         <HeaderWrapper>
@@ -40,7 +37,7 @@ function Header() {
             />
             {isOpen && (
                 <LoginModal
-                    title={holdTitle}
+                    title={"Enter"}
                     isOpen={isOpen}
                     onClose={onCloseModal}
                 />

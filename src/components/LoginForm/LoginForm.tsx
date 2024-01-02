@@ -1,25 +1,25 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { validationSchema } from "./validationSchema";
 import { styled, Link, Button } from "@mui/material";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 import { css } from "@emotion/react";
-// import { SEVERITY } from "../../const/enums";
 import {
     DynamicModuleLoader,
     ReducerList,
 } from "../../utils/DynamicModuleLoader";
 import { loginReducer } from "../../store/slices/login/loginSlice";
 import { useDispatch, useSelector } from "react-redux";
-// import { getLoginError } from "../../store/slices/user/selectors.ts/getLoginErrors";
 import { AppThunkDispatch } from "../../store/store";
 import { signUpByEmail } from "../../store/slices/login/signUpByEmail";
 import { loginUpByEmail } from "../../store/slices/login/loginByEmail";
 import { userActions } from "../../store/slices/user/userSlice";
-import { getIsSignUp } from "../../store/slices/user/selectors.ts/getIsSignUp";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+
 import { TextField } from "@mui/material";
+import { getLoginError } from "../../store/slices/user/selectors.ts/getLoginErrors";
+import { SEVERITY } from "../../const/enums";
+import { UIContext } from "../UIContext";
+import WarnInfo from "../common/ui/Alert/WarnInfo";
 
 const initialReducers: ReducerList = {
     login: loginReducer,
@@ -38,6 +38,7 @@ export interface LoginFormProps {
 const defaultValues = {
     email: "",
     password: "",
+    confirmPassword: "",
     isConfirm: false,
 };
 const LoginForm = (props: LoginFormProps) => {
@@ -46,17 +47,19 @@ const LoginForm = (props: LoginFormProps) => {
     const {
         register,
         handleSubmit,
+        unregister,
         reset,
+        setValue,
         watch,
         formState: { errors },
     } = useForm<FormType>({
         resolver,
         defaultValues,
     });
-    // const error = useSelector(getLoginError);
+    const requestsErrors = useSelector(getLoginError);
     const dispatch = useDispatch<AppThunkDispatch>();
-    const signUp = useSelector(getIsSignUp);
     const checked = watch("isConfirm");
+    const { setAlert } = useContext(UIContext);
 
     const postLogin = async (values: FormType) => {
         const result = await dispatch(
@@ -73,22 +76,33 @@ const LoginForm = (props: LoginFormProps) => {
         if (result.meta.requestStatus === "fulfilled") {
             dispatch(userActions.setError("Successful"));
             onSuccess();
+            setAlert({
+                show: true,
+                message: checked ? "Created succses" : "Login succses",
+                severity: "success",
+            });
             reset();
             dispatch(userActions.setError(""));
         }
     };
 
-    const onSubmit = handleSubmit((data) => {
-        console.log(data, "data");
-        postLogin(data);
-    });
+    const onSubmit = handleSubmit((data) => postLogin(data));
 
     const onSignUP = () => {
-        dispatch(userActions.setIsSignUp(!signUp));
+        setValue("isConfirm", !watch("isConfirm"));
+        dispatch(userActions.setError(""));
     };
 
-    const isSignUp = signUp ? "Login" : "Sign up";
-    const isLogin = !signUp ? "Login" : "Sign up";
+    const isSignUp = checked ? "Login" : "Sign up";
+    const isLogin = !checked ? "Login" : "Sign up";
+
+    useEffect(() => {
+        if (checked) {
+            register("confirmPassword");
+        } else {
+            unregister("confirmPassword");
+        }
+    }, [checked, register, unregister]);
 
     return (
         <DynamicModuleLoader
@@ -112,7 +126,7 @@ const LoginForm = (props: LoginFormProps) => {
                     {...register("password")}
                 />
 
-                {checked && (
+                {checked ? (
                     <TextField
                         label='Confirm Password'
                         fullWidth
@@ -124,12 +138,13 @@ const LoginForm = (props: LoginFormProps) => {
                         }
                         {...register("confirmPassword")}
                     />
-                )}
+                ) : null}
 
-                <FormControlLabel
-                    control={<Checkbox {...register("isConfirm")} />}
-                    label='Sign in'
-                />
+                {requestsErrors && (
+                    <WarnInfo severity={SEVERITY.ERROR}>
+                        {requestsErrors}
+                    </WarnInfo>
+                )}
 
                 <Button
                     color='primary'
