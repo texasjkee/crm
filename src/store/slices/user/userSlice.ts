@@ -5,6 +5,7 @@ import { USER_LOCALSTORAGE_KEY } from "../../../const/localStorage";
 const initialState: UserSchema = {
     authData: { id: null, email: "", accessToken: "" },
     error: "",
+    isSignUp: false,
 };
 
 export const userSlice = createSlice({
@@ -23,6 +24,9 @@ export const userSlice = createSlice({
         logout: (state) => {
             state.authData = undefined;
             localStorage.removeItem(USER_LOCALSTORAGE_KEY);
+        },
+        setIsSignUp: (state, action: PayloadAction<boolean>) => {
+            state.isSignUp = action.payload;
         },
         setError: (state, action: PayloadAction<string>) => {
             state.error = action.payload;

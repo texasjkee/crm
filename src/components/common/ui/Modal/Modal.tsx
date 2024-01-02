@@ -32,22 +32,23 @@ export interface ModalProps {
     title: string;
 }
 
-export default function Modal(props: ModalProps) {
+export const Modal = (props: ModalProps) => {
     const { children, isOpen, onClose, width, title } = props;
 
     const customStyle = {
         maxWidth: width ?? style.maxWidth,
     };
 
+    React.useEffect(() => {
+        console.log(`${title} mount modal`);
+        return () => {
+            console.log(`${title} unmount modal`);
+        };
+    }, [title]);
     return (
         <>
-            <Dialog
-                open={isOpen ?? false}
-                onClose={onClose}
-                aria-labelledby='keep-mounted-modal-title'
-                aria-describedby='keep-mounted-modal-description'
-            >
-                <DialogTitle sx={{ m: 0, p: 2 }} id='customized-dialog-title'>
+            <Dialog open={isOpen ?? false} onClose={onClose}>
+                <DialogTitle sx={{ m: 0, p: 2 }} id='modal'>
                     {title}
                 </DialogTitle>
                 <IconButton
@@ -68,10 +69,4 @@ export default function Modal(props: ModalProps) {
             </Dialog>
         </>
     );
-}
-
-// const IconContainer = styled("div")`
-//     margin-bottom: 10px;
-//     height: auto;
-//     float: right;
-// `;
+};

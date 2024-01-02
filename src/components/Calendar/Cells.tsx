@@ -38,7 +38,6 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
     const [tasks, setTasks] = useState<TaskType[]>([]);
     const [isTaskModal, setIsTaskModal] = useState<boolean>(false);
     const [selectedDay, setSelectedDay] = useState<Date>(currentDate);
-    // const [number, setNumber] = useState(0);
     const monthStart = startOfMonth(currentDate);
     const monthEnd = endOfMonth(currentDate);
     const startOfCalendar = startOfWeek(monthStart, {
@@ -92,6 +91,8 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
         setDays(calculate);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tasks, currentDate]);
+
+    console.log("cells rerender");
 
     return (
         <>

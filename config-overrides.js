@@ -7,5 +7,6 @@ module.exports = override(
         ["@components"]: path.resolve(__dirname, "./components"),
         ["@ui"]: path.resolve(__dirname, "./components/common/ui/*"),
         ["@api"]: path.resolve(__dirname, "./api/*"),
+        ["@hooks"]: path.resolve(__dirname, "./hooks/*"),
     })
 );

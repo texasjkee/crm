@@ -1,79 +1,50 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "@emotion/styled";
-import { Suspense, useCallback, useState } from "react";
-// import { LoginFormAsync } from "../LoginForm/LoginFormAsync";
-import { useDispatch, useSelector } from "react-redux";
-import { type AppThunkDispatch } from "../../store/store";
-import { userActions } from "../../store/slices/user/userSlice";
-import { getUserAuthData } from "../../store/slices/user/selectors.ts/getAuthData";
+import { useState } from "react";
 import LoginButtons from "../LoginForm/LoginButtons";
-import { loginUpByEmail } from "../../store/slices/login/loginByEmail";
-import { LoginFormAsync } from "../LoginForm/LoginFormFormAsync";
-import { FormType } from "../LoginForm/LoginForm";
-import { getLoginError } from "../../store/slices/user/selectors.ts/getLoginErrors";
-
-// import { signUpByEmail } from "../../store/slices/login/signUpByEmail";
+import { getUserAuthData } from "../../store/slices/user/selectors.ts/getAuthData";
+import { useDispatch, useSelector } from "react-redux";
+import LoginModal from "../LoginModal/LoginModal";
+import { userActions } from "../../store/slices/user/userSlice";
+import { getIsSignUp } from "../../store/slices/user/selectors.ts/getIsSignUp";
 
 function Header() {
     const [isOpen, setIsopen] = useState(false);
-    const [signUp, setSignUp] = useState(false);
+    const dispatch = useDispatch();
+
     const authData = useSelector(getUserAuthData);
-    const error = useSelector(getLoginError);
-    const dispatch = useDispatch<AppThunkDispatch>();
+    const isSignUp = useSelector(getIsSignUp);
 
-    const onSubmit = useCallback(
-        async (values: FormType) => {
-            console.log(signUp, "sign up");
-            const result = await dispatch(
-                // singUp
-                //     ? signUpByEmail({
-                //           email: values.email,
-                //           password: values.password,
-                //       })
-                loginUpByEmail({
-                    email: values.email,
-                    password: values.password,
-                })
-            );
-            if (result.meta.requestStatus === "fulfilled") {
-                dispatch(userActions.setError("Successful"));
-                setIsopen(false);
-                dispatch(userActions.setError(""));
-            }
-        },
-        [dispatch, signUp]
-    );
-
-    const onCloseModal = useCallback(() => {
+    const onCloseModal = () => {
         setIsopen(false);
         dispatch(userActions.setError(""));
-    }, [dispatch]);
+    };
 
-    const onLogout = useCallback(() => {
+    const onShowModal = useCallback(() => {
+        setIsopen(true);
+    }, []);
+
+    const onLogout = () => {
         dispatch(userActions.logout());
-    }, [dispatch]);
+    };
 
-    const holdTitle = signUp ? "Sign up" : "Enter";
+    const holdTitle = isSignUp ? "Sign up" : "Enter";
     console.log("header rerender");
     return (
         <HeaderWrapper>
             <h1>CRM</h1>
             <LoginButtons
-                login={() => setIsopen(true)}
+                login={onShowModal}
                 authData={authData}
                 logOut={onLogout}
             />
-            <Suspense fallback={""}>
-                <LoginFormAsync
-                    error={error}
+            {isOpen && (
+                <LoginModal
+                    title={holdTitle}
                     isOpen={isOpen}
                     onClose={onCloseModal}
-                    handleSubmit={onSubmit}
-                    signUp={signUp}
-                    title={holdTitle}
-                    setSignUp={() => setSignUp((prev) => !prev)}
                 />
-            </Suspense>
+            )}
         </HeaderWrapper>
     );
 }

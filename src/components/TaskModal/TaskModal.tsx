@@ -1,4 +1,4 @@
-import React, { type ChangeEvent, type FormEvent, useState } from "react";
+import React, { type ChangeEvent, type FormEvent, useState, memo } from "react";
 import FormControl from "@mui/material/FormControl";
 import styled from "@emotion/styled";
 import { Button, TextareaAutosize, css } from "@mui/material";
@@ -6,7 +6,7 @@ import Compact from "react-color/lib/components/compact/Compact";
 import { type ColorResult } from "react-color";
 import Labels from "../Calendar/Labels";
 import { type TaskType } from "../Calendar/Calendar";
-import Modal, { ModalSize } from "../common/ui/Modal/Modal";
+import { Modal, ModalSize } from "../common/ui/Modal/Modal";
 
 export interface TaskModalProps {
     isOpen: boolean;
@@ -14,7 +14,11 @@ export interface TaskModalProps {
     holdTask: (values: Pick<TaskType, "priority" | "title">) => void;
 }
 
-const TaskModal = ({ isOpen, onClose, holdTask }: TaskModalProps) => {
+const TaskForm = memo(function TaskForm({
+    isOpen,
+    onClose,
+    holdTask,
+}: TaskModalProps) {
     const [colors, setColor] = useState<string[]>([]);
     const [task, setTask] = useState<string>("");
 
@@ -47,7 +51,7 @@ const TaskModal = ({ isOpen, onClose, holdTask }: TaskModalProps) => {
             isOpen={isOpen}
             onClose={onClose}
         >
-            <TaskForm onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit}>
                 <FormControl>
                     <h1>Priority</h1>
                     {colors.length > 5 ? (
@@ -79,13 +83,13 @@ const TaskModal = ({ isOpen, onClose, holdTask }: TaskModalProps) => {
                         </Button>
                     </div>
                 </FormControl>
-            </TaskForm>
+            </Form>
         </Modal>
     );
-};
+});
 
-export default TaskModal;
-const TaskForm = styled.form`
+export default TaskForm;
+const Form = styled.form`
     display: flex;
     flex-direction: column;
     div,

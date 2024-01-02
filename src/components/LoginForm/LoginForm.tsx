@@ -1,57 +1,99 @@
-import React, { memo } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { validationSchema } from "./validationSchema";
-import { Button, TextField, styled, Link, Alert } from "@mui/material";
+import { styled, Link, Button } from "@mui/material";
 import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
 import { css } from "@emotion/react";
-import Modal, { ModalSize } from "../common/ui/Modal/Modal";
-import { SEVERITY } from "../../const/enums";
+// import { SEVERITY } from "../../const/enums";
+import {
+    DynamicModuleLoader,
+    ReducerList,
+} from "../../utils/DynamicModuleLoader";
+import { loginReducer } from "../../store/slices/login/loginSlice";
+import { useDispatch, useSelector } from "react-redux";
+// import { getLoginError } from "../../store/slices/user/selectors.ts/getLoginErrors";
+import { AppThunkDispatch } from "../../store/store";
+import { signUpByEmail } from "../../store/slices/login/signUpByEmail";
+import { loginUpByEmail } from "../../store/slices/login/loginByEmail";
+import { userActions } from "../../store/slices/user/userSlice";
+import { getIsSignUp } from "../../store/slices/user/selectors.ts/getIsSignUp";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import { TextField } from "@mui/material";
+
+const initialReducers: ReducerList = {
+    login: loginReducer,
+};
 
 export interface FormType {
     email: string;
     password: string;
     confirmPassword?: string;
+    isConfirm: boolean;
 }
 
 export interface LoginFormProps {
-    handleSubmit: (values: FormType) => void;
-    signUp?: boolean;
-    isOpen: boolean;
-    onClose: () => void;
-    title: string;
-    setSignUp: () => void;
-    error?: string;
+    onSuccess: () => void;
 }
-
-const LoginForm = memo(function LoginForm(props: LoginFormProps) {
-    const {
-        handleSubmit: onHandleSubmit,
-        signUp,
-        isOpen,
-        onClose,
-        title,
-        setSignUp,
-        error,
-    } = props;
-
+const defaultValues = {
+    email: "",
+    password: "",
+    isConfirm: false,
+};
+const LoginForm = (props: LoginFormProps) => {
+    const { onSuccess } = props;
     const resolver = useYupValidationResolver(validationSchema);
     const {
         register,
         handleSubmit,
+        reset,
+        watch,
         formState: { errors },
-    } = useForm<FormType>({ resolver });
-    const onSubmit = handleSubmit((data) => onHandleSubmit(data));
+    } = useForm<FormType>({
+        resolver,
+        defaultValues,
+    });
+    // const error = useSelector(getLoginError);
+    const dispatch = useDispatch<AppThunkDispatch>();
+    const signUp = useSelector(getIsSignUp);
+    const checked = watch("isConfirm");
+
+    const postLogin = async (values: FormType) => {
+        const result = await dispatch(
+            checked
+                ? signUpByEmail({
+                      email: values.email,
+                      password: values.password,
+                  })
+                : loginUpByEmail({
+                      email: values.email,
+                      password: values.password,
+                  })
+        );
+        if (result.meta.requestStatus === "fulfilled") {
+            dispatch(userActions.setError("Successful"));
+            onSuccess();
+            reset();
+            dispatch(userActions.setError(""));
+        }
+    };
+
+    const onSubmit = handleSubmit((data) => {
+        console.log(data, "data");
+        postLogin(data);
+    });
+
+    const onSignUP = () => {
+        dispatch(userActions.setIsSignUp(!signUp));
+    };
 
     const isSignUp = signUp ? "Login" : "Sign up";
     const isLogin = !signUp ? "Login" : "Sign up";
 
-    console.log("react hook form rerender");
     return (
-        <Modal
-            title={title}
-            width={ModalSize.SMALL}
-            isOpen={isOpen}
-            onClose={onClose}
+        <DynamicModuleLoader
+            removeAfterUnmount={true}
+            reducers={initialReducers}
         >
             <Form onSubmit={onSubmit}>
                 <TextField
@@ -69,22 +111,26 @@ const LoginForm = memo(function LoginForm(props: LoginFormProps) {
                     helperText={errors.password && errors.password.message}
                     {...register("password")}
                 />
-                {signUp && (
-                    <>
-                        <TextField
-                            label='Confirm Password'
-                            fullWidth
-                            type='password'
-                            error={Boolean(errors.confirmPassword)}
-                            helperText={
-                                errors.confirmPassword &&
-                                errors.confirmPassword.message
-                            }
-                            {...register("confirmPassword")}
-                        />
-                    </>
+
+                {checked && (
+                    <TextField
+                        label='Confirm Password'
+                        fullWidth
+                        type='password'
+                        error={Boolean(errors.confirmPassword)}
+                        helperText={
+                            errors.confirmPassword &&
+                            errors.confirmPassword.message
+                        }
+                        {...register("confirmPassword")}
+                    />
                 )}
-                {error && <Alert severity={SEVERITY.ERROR}>{error}</Alert>}
+
+                <FormControlLabel
+                    control={<Checkbox {...register("isConfirm")} />}
+                    label='Sign in'
+                />
+
                 <Button
                     color='primary'
                     variant='contained'
@@ -98,14 +144,14 @@ const LoginForm = memo(function LoginForm(props: LoginFormProps) {
                         float: right;
                     `}
                 >
-                    <Link href={"#"} onClick={setSignUp}>
+                    <Link href={"#"} onClick={onSignUP}>
                         {isSignUp}
                     </Link>
                 </div>
             </Form>
-        </Modal>
+        </DynamicModuleLoader>
     );
-});
+};
 
 export default LoginForm;
 const Form = styled("form")({

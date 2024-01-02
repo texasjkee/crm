@@ -32,7 +32,6 @@ export const signUpByEmail = createAsyncThunk<
             JSON.stringify(response.data)
         );
         dispatch(userActions.setAuthData(response.data));
-        console.log(response.data, "response data");
 
         return response.data;
     } catch (error) {
