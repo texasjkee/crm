@@ -1,11 +1,4 @@
-import React, {
-    Suspense,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState,
-    memo,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState, memo } from "react";
 import {
     eachDayOfInterval,
     endOfMonth,
@@ -23,7 +16,10 @@ import Day from "./Day";
 import { DayContainer } from "./styles";
 import { type TaskType } from "./Calendar";
 import Task from "./Task";
-import { TaskModalAsync } from "../TaskModal/TaskModalAsync";
+import { AppThunkDispatch } from "../../store/store";
+import { useDispatch } from "react-redux";
+import { eventAction } from "../../store/slices/events/eventSlice";
+// import { TaskModalAsync } from "../TaskModal/TaskModalAsync";
 
 interface IProps {
     currentDate: Date;
@@ -36,8 +32,8 @@ export interface DayWithTask {
 const Cells = memo(function Cells({ currentDate }: IProps) {
     const [days, setDays] = useState<DayWithTask[]>([]);
     const [tasks, setTasks] = useState<TaskType[]>([]);
-    const [isTaskModal, setIsTaskModal] = useState<boolean>(false);
-    const [selectedDay, setSelectedDay] = useState<Date>(currentDate);
+    const dispatch = useDispatch<AppThunkDispatch>();
+    // const [selectedDay, setSelectedDay] = useState<Date>(currentDate);
     const monthStart = startOfMonth(currentDate);
     const monthEnd = endOfMonth(currentDate);
     const startOfCalendar = startOfWeek(monthStart, {
@@ -49,21 +45,20 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
         end: endOfCalendar,
     });
 
-    const onCloseModal = useCallback(() => {
-        setIsTaskModal(false);
-    }, []);
+    // const holdaTask = (values: Pick<TaskType, "priority" | "title">) => {
+    //     setTasks((prevTasks) => [
+    //         ...prevTasks,
+    //         { id: selectedDay, priority: values.priority, title: values.title },
+    //     ]);
+    // };
 
-    const holdaTask = (values: Pick<TaskType, "priority" | "title">) => {
-        setTasks((prevTasks) => [
-            ...prevTasks,
-            { id: selectedDay, priority: values.priority, title: values.title },
-        ]);
-    };
-
-    const onShowModal = useCallback((day: Date) => {
-        setSelectedDay(day);
-        setIsTaskModal(true);
-    }, []);
+    const onShowModal = useCallback(
+        (day: string) => {
+            dispatch(eventAction.setSelectedDay(day));
+            console.log(day, "day");
+        },
+        [dispatch]
+    );
 
     const calculate = useMemo(() => {
         const result = cells.map((item) => ({
@@ -111,14 +106,14 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
                         ))}
                 </DayContainer>
             ))}
-
+            {/* 
             <Suspense fallback={""}>
                 <TaskModalAsync
                     holdTask={holdaTask}
                     isOpen={isTaskModal}
                     onClose={onCloseModal}
                 />
-            </Suspense>
+            </Suspense> */}
         </>
     );
 });

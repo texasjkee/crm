@@ -1,5 +1,5 @@
 import axios, { type AxiosResponse } from "axios";
-import { USER_LOCALSTORAGE_KEY } from "../const/localStorage";
+import { USER_LOCALSTORAGE_KEY } from "../components/common/const/localStorage";
 import { FormType } from "../components/LoginForm/LoginForm";
 
 export const $api = axios.create({

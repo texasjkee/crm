@@ -8,7 +8,7 @@ import { type DayWithTask } from "./Cells";
 interface IProps {
     // item: Record<string, Date>;
     item: DayWithTask;
-    onShowModal: (day: Date) => void;
+    onShowModal: (day: string) => void;
 }
 
 const Day = memo(function Day({ item, onShowModal }: IProps) {
@@ -17,10 +17,10 @@ const Day = memo(function Day({ item, onShowModal }: IProps) {
         <div css={addContainer}>
             <IconButton
                 onClick={() => {
-                    onShowModal(item.day);
+                    onShowModal(item.day.toString());
                 }}
                 color='primary'
-                aria-label='add to shopping cart'
+                aria-label='add event'
             >
                 <AddIcon />
             </IconButton>

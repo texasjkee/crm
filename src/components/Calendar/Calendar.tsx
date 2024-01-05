@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
     format,
     addMonths,
@@ -11,6 +11,11 @@ import { CalendarHeader } from "./CalendarHeader";
 import WeekDays from "./WeekDays";
 import Cells from "./Cells";
 import styled from "@emotion/styled";
+import EventsModal from "../EvetsModal/EventsModal";
+import { useDispatch, useSelector } from "react-redux";
+import { getIsopen } from "../../store/slices/events/selectors/getIsOpen";
+import { AppThunkDispatch } from "../../store/store";
+import { eventAction } from "../../store/slices/events/eventSlice";
 
 export interface TaskType {
     id: Date;
@@ -25,6 +30,16 @@ interface CalendarProps {
 
 const Calendar: React.FC<CalendarProps> = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
+    // const [openEventsModal, setOpenEventsModal] = useState<boolean>(false);
+    const isOpen = useSelector(getIsopen);
+    const dispatch = useDispatch<AppThunkDispatch>();
+
+    const onCloseModal = useCallback(() => {
+        dispatch(eventAction.setCloseModal());
+    }, [dispatch]);
+    // const openHandler = () => {
+    //     setOpenEventsModal(true);
+    // };
 
     const nextMonth = () => {
         setCurrentDate((prevDate) => addMonths(prevDate, 1));
@@ -62,6 +77,9 @@ const Calendar: React.FC<CalendarProps> = () => {
                     <WeekDays key={index} day={day} />
                 ))}
                 <Cells currentDate={currentDate} />
+                {isOpen && (
+                    <EventsModal isOpen={isOpen} onClose={onCloseModal} />
+                )}
             </CalendarWrapper>
         </Container>
     );

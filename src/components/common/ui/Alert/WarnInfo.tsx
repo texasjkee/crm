@@ -1,6 +1,6 @@
 import { Alert, AlertColor } from "@mui/material";
 import { ReactNode } from "react";
-import { SEVERITY } from "../../../../const/enums";
+import { SEVERITY } from "../../const/enums";
 
 interface IProps {
     children: ReactNode;

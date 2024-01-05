@@ -70,7 +70,7 @@ export const DayContainer = styled(Reorder.Group)`
     position: relative;
     z-index: 1;
     overflow-x: auto;
-    
+    flex:1;  
 
     &:nth-of-type(7n + 7) {
         border-right: 0;

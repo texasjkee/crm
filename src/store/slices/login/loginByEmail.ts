@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { USER_LOCALSTORAGE_KEY } from "../../../const/localStorage";
+import { USER_LOCALSTORAGE_KEY } from "../../../components/common/const/localStorage";
 import { type User } from "./types/user";
 import { type ThunkConfig } from "../../types/stateShema";
 import { userActions } from "../user/userSlice";

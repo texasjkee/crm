@@ -1,12 +1,11 @@
 import * as yup from "yup";
 import { useCallback } from "react";
-import { FormType } from "../components/LoginForm/LoginForm";
 
-export const useYupValidationResolver = (
+export const useYupValidationResolver = <T>(
     validationSchema: yup.AnyObjectSchema
 ) =>
     useCallback(
-        async (data: FormType) => {
+        async (data: T) => {
             try {
                 const values = await validationSchema.validate(data, {
                     abortEarly: false,

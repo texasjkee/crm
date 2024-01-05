@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { validationSchema } from "./validationSchema";
 import { styled, Link, Button } from "@mui/material";
-import { useYupValidationResolver } from "../../hooks/useYupValidationResolver";
+import { useYupValidationResolver } from "../common/hooks/useYupValidationResolver";
 import { css } from "@emotion/react";
 import {
     DynamicModuleLoader,
@@ -17,7 +17,7 @@ import { userActions } from "../../store/slices/user/userSlice";
 
 import { TextField } from "@mui/material";
 import { getLoginError } from "../../store/slices/user/selectors.ts/getLoginErrors";
-import { SEVERITY } from "../../const/enums";
+import { SEVERITY } from "../common/const/enums";
 import { UIContext } from "../UIContext";
 import WarnInfo from "../common/ui/Alert/WarnInfo";
 
@@ -41,8 +41,7 @@ const defaultValues = {
     confirmPassword: "",
     isConfirm: false,
 };
-const LoginForm = (props: LoginFormProps) => {
-    const { onSuccess } = props;
+const LoginForm = ({ onSuccess }: LoginFormProps) => {
     const resolver = useYupValidationResolver(validationSchema);
     const {
         register,
@@ -169,7 +168,7 @@ const LoginForm = (props: LoginFormProps) => {
 };
 
 export default LoginForm;
-const Form = styled("form")({
+export const Form = styled("form")({
     "& div, Button": {
         marginBottom: 10,
     },

@@ -10,6 +10,7 @@ import { createReducerManager } from "./reducersManager";
 import { $api } from "../api/api";
 import { type NavigateOptions, type To } from "react-router-dom";
 import { userReducer } from "./slices/user/userSlice";
+import { eventnReducer } from "./slices/events/eventSlice";
 
 export function createReduxStore(
     initialState?: StateSchema,
@@ -19,6 +20,7 @@ export function createReduxStore(
     const rootReducers: ReducersMapObject<StateSchema> = {
         ...asyncReducers,
         user: userReducer,
+        event: eventnReducer,
     };
     const reducerManager = createReducerManager(rootReducers);
 
