@@ -42,7 +42,7 @@ const defaultValues = {
     isConfirm: false,
 };
 const LoginForm = ({ onSuccess }: LoginFormProps) => {
-    const resolver = useYupValidationResolver(validationSchema);
+    const resolver = useYupValidationResolver<FormType>(validationSchema);
     const {
         register,
         handleSubmit,

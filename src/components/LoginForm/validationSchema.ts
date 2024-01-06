@@ -2,7 +2,7 @@ import * as Yup from "yup";
 import { ObjectSchema, boolean } from "yup";
 import { FormType } from "./LoginForm";
 
-const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
+const passwordRules = /^(?=.*\d)(?=.*[A-Z]).{5,}$/;
 
 const errorMessages = {
     email: {
