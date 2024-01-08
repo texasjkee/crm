@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { validationSchema } from "./validationSchema";
-import { styled, Link, Button } from "@mui/material";
+import { styled, Link, Button, TextField } from "@mui/material";
 import { useYupValidationResolver } from "../common/hooks/useYupValidationResolver";
 import { css } from "@emotion/react";
 import {
@@ -14,8 +14,6 @@ import { AppThunkDispatch } from "../../store/store";
 import { signUpByEmail } from "../../store/slices/login/signUpByEmail";
 import { loginUpByEmail } from "../../store/slices/login/loginByEmail";
 import { userActions } from "../../store/slices/user/userSlice";
-
-import { TextField } from "@mui/material";
 import { getLoginError } from "../../store/slices/user/selectors.ts/getLoginErrors";
 import { SEVERITY } from "../common/const/enums";
 import { UIContext } from "../UIContext";
@@ -113,7 +111,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
                     label='Email'
                     fullWidth
                     error={Boolean(errors.email)}
-                    helperText={errors.email && errors.email.message}
+                    helperText={errors?.email?.message}
                     {...register("email")}
                 />
                 <TextField
@@ -121,7 +119,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
                     label='Password'
                     type='password'
                     error={Boolean(errors.password)}
-                    helperText={errors.password && errors.password.message}
+                    helperText={errors?.password?.message}
                     {...register("password")}
                 />
 
@@ -131,10 +129,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
                         fullWidth
                         type='password'
                         error={Boolean(errors.confirmPassword)}
-                        helperText={
-                            errors.confirmPassword &&
-                            errors.confirmPassword.message
-                        }
+                        helperText={errors?.confirmPassword?.message}
                         {...register("confirmPassword")}
                     />
                 ) : null}
@@ -169,7 +164,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
 
 export default LoginForm;
 export const Form = styled("form")({
-    "& div, Button": {
+    "& .MuiTextField-root, .MuiButton-root,  .MuiInput-underline": {
         marginBottom: 10,
     },
 });

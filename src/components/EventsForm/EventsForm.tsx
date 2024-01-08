@@ -2,7 +2,6 @@ import { Button, TextField } from "@mui/material";
 import React from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { Form } from "../LoginForm/LoginForm";
-import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { defaultValues } from "./initValuesForm";
@@ -16,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppThunkDispatch } from "../../store/store";
 import { createEvent } from "../../store/slices/events/createEvent";
 import { getUserId } from "../../store/slices/events/selectors/getUserId";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 export interface EventsFormProps {
     onSuccess: () => void;
@@ -25,6 +25,8 @@ const EventsForm = ({ onSuccess }: EventsFormProps) => {
     const resolver = useYupValidationResolver<EventFormTypes>(validationEvents);
     const dispatch = useDispatch<AppThunkDispatch>();
     const userId = useSelector(getUserId);
+    const test = new AdapterDayjs();
+    console.log(test, "trst");
 
     const {
         register,
@@ -47,35 +49,34 @@ const EventsForm = ({ onSuccess }: EventsFormProps) => {
                 label='Name'
                 fullWidth
                 error={Boolean(errors.name)}
-                helperText={errors.name && errors.name.message}
+                helperText={errors?.name?.message}
                 {...register("name")}
             />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Controller
                     control={control}
                     name='date'
-                    render={({ field: { onChange, value } }) => (
-                        <MobileTimePicker
+                    render={({ field: { onChange } }) => (
+                        <DateTimePicker
                             {...register("date")}
                             sx={{ width: "100%" }}
-                            value={value}
+                            // value={value}
                             onChange={onChange}
                         />
                     )}
                 />
-                <InputLabel htmlFor='standard-adornment-amount'>
-                    Price
-                </InputLabel>
-                <Input
-                    fullWidth
-                    error={Boolean(errors.price)}
-                    {...register("price")}
-                    startAdornment={
-                        <InputAdornment position='start'>$</InputAdornment>
-                    }
-                />
-                {errors && <p>{errors.price && errors.price.message}</p>}
             </LocalizationProvider>
+            <InputLabel htmlFor='standard-adornment-amount'>Price</InputLabel>
+            <Input
+                fullWidth
+                error={Boolean(errors.price)}
+                {...register("price")}
+                startAdornment={
+                    <InputAdornment position='start'>$</InputAdornment>
+                }
+            />
+            {errors && <p>{errors?.price?.message}</p>}
+
             <Button color='primary' variant='contained' fullWidth type='submit'>
                 Save
             </Button>
