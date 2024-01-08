@@ -8,7 +8,7 @@ import {
     type ReducerManager,
     type StateSchema,
     type StateSchemaKey,
-} from "./types/stateShema";
+} from "./types/stateSchema";
 
 export function createReducerManager(
     initialReducers: ReducersMapObject<StateSchema>

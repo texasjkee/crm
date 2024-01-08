@@ -5,7 +5,6 @@ import { Form } from "../LoginForm/LoginForm";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { format } from "date-fns";
 import { defaultValues } from "./initValuesForm";
 import InputLabel from "@mui/material/InputLabel";
 import Input from "@mui/material/Input";
@@ -13,13 +12,19 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { EventFormTypes } from "./types";
 import { useYupValidationResolver } from "../common/hooks/useYupValidationResolver";
 import { validationEvents } from "./validationEvets";
+import { useDispatch, useSelector } from "react-redux";
+import { AppThunkDispatch } from "../../store/store";
+import { createEvent } from "../../store/slices/events/createEvent";
+import { getUserId } from "../../store/slices/events/selectors/getUserId";
 
-export interface EvetsFormProps {
+export interface EventsFormProps {
     onSuccess: () => void;
 }
 
-const EventsForm = ({ onSuccess }: EvetsFormProps) => {
+const EventsForm = ({ onSuccess }: EventsFormProps) => {
     const resolver = useYupValidationResolver<EventFormTypes>(validationEvents);
+    const dispatch = useDispatch<AppThunkDispatch>();
+    const userId = useSelector(getUserId);
 
     const {
         register,
@@ -28,8 +33,11 @@ const EventsForm = ({ onSuccess }: EvetsFormProps) => {
         formState: { errors },
     } = useForm<EventFormTypes>({ resolver, defaultValues });
 
-    const onSubmit: SubmitHandler<EventFormTypes> = (data) =>
-        console.log(format(new Date(data.dateTime), "HH:mm"), data, "submit");
+    const onSubmit: SubmitHandler<EventFormTypes> = (data) => {
+        if (userId)
+            dispatch(createEvent({ ...data, authorId: userId, isDone: false }));
+    };
+
     console.log(onSuccess);
     console.log("Events form rendered");
 
@@ -45,10 +53,10 @@ const EventsForm = ({ onSuccess }: EvetsFormProps) => {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Controller
                     control={control}
-                    name='dateTime'
+                    name='date'
                     render={({ field: { onChange, value } }) => (
                         <MobileTimePicker
-                            {...register("dateTime")}
+                            {...register("date")}
                             sx={{ width: "100%" }}
                             value={value}
                             onChange={onChange}

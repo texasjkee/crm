@@ -1,5 +1,5 @@
 export interface EventFormTypes {
     name: string;
-    dateTime: Date;
+    date: Date;
     price: number;
 }

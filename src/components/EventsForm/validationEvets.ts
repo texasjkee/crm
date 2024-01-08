@@ -23,7 +23,7 @@ export const validationEvents: ObjectSchema<EventFormTypes> =
             .matches(/^[A-Za-z ]*$/, "Please enter valid name")
             .max(40)
             .required(errorMessages.name.required),
-        dateTime: Yup.date().required(errorMessages.dateTime.required),
+        date: Yup.date().required(errorMessages.dateTime.required),
         price: Yup.number()
             .required()
             .typeError(errorMessages.price.isNumber)

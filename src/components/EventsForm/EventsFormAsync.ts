@@ -1,6 +1,6 @@
 import { FC, lazy } from "react";
-import { EvetsFormProps } from "./EventsForm";
+import { EventsFormProps } from "./EventsForm";
 
-export const EventsFormAsync = lazy<FC<EvetsFormProps>>(
+export const EventsFormAsync = lazy<FC<EventsFormProps>>(
     async () => await import("./EventsForm")
 );

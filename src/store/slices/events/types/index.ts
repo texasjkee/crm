@@ -1,3 +1,12 @@
+export interface EventTResponseType {
+    id: number;
+    name: string;
+    date: Date;
+    price: number;
+    isDone: boolean;
+    authorId: number;
+}
+
 export interface EventSchema {
     id: string;
     selectedDay: string | null;
@@ -5,6 +14,8 @@ export interface EventSchema {
     dateTime: string;
     price: number;
     isDone: boolean;
-    error: string;
+    error: string | undefined;
     isOpen: boolean;
+    isLoading: boolean;
+    events: Event[];
 }

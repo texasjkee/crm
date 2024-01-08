@@ -5,12 +5,12 @@ import {
     type ThunkDispatch,
     type Reducer,
 } from "@reduxjs/toolkit";
-import { type StateSchema, type ThunkExtraArg } from "./types/stateShema";
+import { type StateSchema, type ThunkExtraArg } from "./types/stateSchema";
 import { createReducerManager } from "./reducersManager";
 import { $api } from "../api/api";
 import { type NavigateOptions, type To } from "react-router-dom";
 import { userReducer } from "./slices/user/userSlice";
-import { eventnReducer } from "./slices/events/eventSlice";
+import { eventReducer } from "./slices/events/eventSlice";
 
 export function createReduxStore(
     initialState?: StateSchema,
@@ -20,7 +20,7 @@ export function createReduxStore(
     const rootReducers: ReducersMapObject<StateSchema> = {
         ...asyncReducers,
         user: userReducer,
-        event: eventnReducer,
+        event: eventReducer,
     };
     const reducerManager = createReducerManager(rootReducers);
 
