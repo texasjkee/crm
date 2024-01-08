@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppThunkDispatch } from "../../store/store";
 import { createEvent } from "../../store/slices/events/createEvent";
 import { getUserId } from "../../store/slices/events/selectors/getUserId";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 
 export interface EventsFormProps {
     onSuccess: () => void;
@@ -57,7 +57,7 @@ const EventsForm = ({ onSuccess }: EventsFormProps) => {
                     control={control}
                     name='date'
                     render={({ field: { onChange } }) => (
-                        <DateTimePicker
+                        <MobileDateTimePicker
                             {...register("date")}
                             sx={{ width: "100%" }}
                             // value={value}
