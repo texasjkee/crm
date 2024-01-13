@@ -28,6 +28,7 @@ export const loginSlice = createSlice({
             })
             .addCase(signUpByEmail.fulfilled, (state) => {
                 state.isLoading = true;
+                state.error = "pls, do login";
             })
             .addCase(signUpByEmail.rejected, (state, action) => {
                 state.isLoading = false;
