@@ -13,6 +13,10 @@ const errorMessages = {
         required: "Password is required",
         weak: "Please create a stronger password",
     },
+    name: {
+        required: "Name is required",
+        invalid: "To short name",
+    },
     confirmPassword: {
         required: "Confirm password must be required",
         mismatch: "Your passwords do not match",
@@ -33,6 +37,15 @@ export const validationSchema: ObjectSchema<FormType> = Yup.object().shape({
                 }),
             otherwise: () => Yup.string(),
         }),
+    name: Yup.string().when("isConfirm", {
+        is: (value: boolean) => value,
+        then: (schema) =>
+            schema
+                .required(errorMessages.name.required)
+                .min(3)
+                .max(40)
+                .matches(/^[A-Za-z ]*$/, "Please enter valid name"),
+    }),
     isConfirm: boolean().required(),
     confirmPassword: Yup.string().when("isConfirm", {
         is: (value: boolean) => value,

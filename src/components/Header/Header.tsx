@@ -1,6 +1,5 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "@emotion/styled";
-import { useState } from "react";
 import LoginButtons from "../LoginForm/LoginButtons";
 import { getUserAuthData } from "../../store/slices/user/selectors.ts/getAuthData";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,18 +29,20 @@ function Header() {
     return (
         <HeaderWrapper>
             <h1>CRM</h1>
-            <LoginButtons
-                login={onShowModal}
-                authData={authData}
-                logOut={onLogout}
-            />
-            {isOpen && (
-                <LoginModal
-                    title={"Enter"}
-                    isOpen={isOpen}
-                    onClose={onCloseModal}
+            <ControllerPanel>
+                <LoginButtons
+                    login={onShowModal}
+                    authData={authData}
+                    logOut={onLogout}
                 />
-            )}
+                {isOpen && (
+                    <LoginModal
+                        title={"Enter"}
+                        isOpen={isOpen}
+                        onClose={onCloseModal}
+                    />
+                )}
+            </ControllerPanel>
         </HeaderWrapper>
     );
 }
@@ -54,4 +55,7 @@ const HeaderWrapper = styled("div")`
     align-items: center;
     justify-content: space-between;
     background: var(--yellow);
+`;
+const ControllerPanel = styled("div")`
+    display: flex;
 `;

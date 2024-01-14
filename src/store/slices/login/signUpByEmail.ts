@@ -6,6 +6,7 @@ import { userActions } from "../user/userSlice";
 import axios from "axios";
 
 interface LoginByUsernameProps {
+    name?: string;
     email: string;
     password: string;
 }
@@ -16,12 +17,11 @@ export const signUpByEmail = createAsyncThunk<
     ThunkConfig<string>
 >("auth/signup", async (authData, thunkApi) => {
     const { extra, dispatch, rejectWithValue } = thunkApi;
-    const { email, password } = authData;
 
     try {
         const response = await extra.api.post<User>(
-            "http://localhost:3001/auth/signup",
-            { email, password }
+            "http://localhost:3001/auth/register",
+            authData
         );
 
         if (!response.data) {

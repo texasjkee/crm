@@ -26,6 +26,7 @@ const initialReducers: ReducerList = {
 export interface FormType {
     email: string;
     password: string;
+    name?: string;
     confirmPassword?: string;
     isConfirm: boolean;
 }
@@ -36,16 +37,16 @@ export interface LoginFormProps {
 const defaultValues = {
     email: "",
     password: "",
+    name: "",
     confirmPassword: "",
     isConfirm: false,
 };
-const LoginForm = ({ onSuccess }: LoginFormProps) => {
+const LoginForm = () => {
     const resolver = useYupValidationResolver<FormType>(validationSchema);
     const {
         register,
         handleSubmit,
         unregister,
-        reset,
         setValue,
         watch,
         formState: { errors },
@@ -62,6 +63,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
         const result = await dispatch(
             checked
                 ? signUpByEmail({
+                      name: values.name,
                       email: values.email,
                       password: values.password,
                   })
@@ -72,13 +74,13 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
         );
         if (result.meta.requestStatus === "fulfilled") {
             dispatch(userActions.setError("Successful"));
-            onSuccess();
+            setValue("isConfirm", !watch("isConfirm"));
+            // onSuccess();
             setAlert({
                 show: true,
                 message: checked ? "Created succses" : "Login succses",
                 severity: "success",
             });
-            reset();
             dispatch(userActions.setError(""));
         }
     };
@@ -96,8 +98,10 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
     useEffect(() => {
         if (checked) {
             register("confirmPassword");
+            register("name");
         } else {
             unregister("confirmPassword");
+            unregister("name");
         }
     }, [checked, register, unregister]);
 
@@ -107,6 +111,16 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
             reducers={initialReducers}
         >
             <Form onSubmit={onSubmit}>
+                {checked ? (
+                    <TextField
+                        label='Name'
+                        fullWidth
+                        type='name'
+                        error={Boolean(errors.name)}
+                        helperText={errors?.name?.message}
+                        {...register("name")}
+                    />
+                ) : null}
                 <TextField
                     label='Email'
                     fullWidth
@@ -133,7 +147,6 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
                         {...register("confirmPassword")}
                     />
                 ) : null}
-
                 {requestsErrors && (
                     <WarnInfo severity={SEVERITY.ERROR}>
                         {requestsErrors}
