@@ -38,7 +38,7 @@ export const routeConfig: Record<AppRoutes, RouteSchema> = {
 };
 // add function to get all keys from obj routeConfig and write in routeConfigArray
 export const routeConfigArray = Object.values(routeConfig).map(
-    ({ path, lazy, index }) => ({ path, lazy, index })
+    (routeConfig) => routeConfig
 );
 
-console.log(routeConfig);
+console.log(routeConfigArray);
