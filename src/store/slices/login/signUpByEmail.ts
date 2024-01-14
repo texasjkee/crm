@@ -4,6 +4,7 @@ import { type User } from "./types/user";
 import { type ThunkConfig } from "../../types/stateSchema";
 import { userActions } from "../user/userSlice";
 import axios from "axios";
+import { URL } from "../../../api/api";
 
 interface LoginByUsernameProps {
     name?: string;
@@ -19,10 +20,7 @@ export const signUpByEmail = createAsyncThunk<
     const { extra, dispatch, rejectWithValue } = thunkApi;
 
     try {
-        const response = await extra.api.post<User>(
-            "http://localhost:3001/auth/register",
-            authData
-        );
+        const response = await extra.api.post<User>(URL.REGISTRATION, authData);
 
         if (!response.data) {
             throw new Error();

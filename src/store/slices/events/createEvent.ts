@@ -3,28 +3,26 @@ import { type ThunkConfig } from "../../types/stateSchema";
 import axios from "axios";
 import { eventAction } from "./eventSlice";
 import { EventTResponseType } from "./types";
+import { URL } from "../../../api/api";
 
-interface createEventProps {
+interface CreateEventProps {
     name: string;
     date: Date;
     price: number;
     isDone: boolean;
-    authorId: number;
 }
 
 export const createEvent = createAsyncThunk<
     EventTResponseType,
-    createEventProps,
+    CreateEventProps,
     ThunkConfig<string>
 >("event/create", async (createData, thunkApi) => {
     const { extra, dispatch, rejectWithValue } = thunkApi;
-    const authorId = localStorage.getItem("user");
-    console.log(authorId, "authorid");
 
     try {
         const response = await extra.api.post<EventTResponseType>(
-            "http://localhost:3001/event/create",
-            { ...createData, authorId: createData.authorId }
+            URL.CREATE_EVENTS,
+            createData
         );
 
         console.log(response.data, "response data");

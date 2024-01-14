@@ -41,7 +41,7 @@ const defaultValues = {
     confirmPassword: "",
     isConfirm: false,
 };
-const LoginForm = () => {
+const LoginForm = ({ onSuccess }: LoginFormProps) => {
     const resolver = useYupValidationResolver<FormType>(validationSchema);
     const {
         register,
@@ -75,7 +75,7 @@ const LoginForm = () => {
         if (result.meta.requestStatus === "fulfilled") {
             dispatch(userActions.setError("Successful"));
             setValue("isConfirm", !watch("isConfirm"));
-            // onSuccess();
+            onSuccess();
             setAlert({
                 show: true,
                 message: checked ? "Created succses" : "Login succses",

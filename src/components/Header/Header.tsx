@@ -7,18 +7,17 @@ import LoginModal from "../LoginModal/LoginModal";
 import { userActions } from "../../store/slices/user/userSlice";
 
 function Header() {
-    const [isOpen, setIsopen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
-
     const authData = useSelector(getUserAuthData);
 
     const onCloseModal = () => {
-        setIsopen(false);
+        setIsOpen(false);
         dispatch(userActions.setError(""));
     };
 
     const onShowModal = useCallback(() => {
-        setIsopen(true);
+        setIsOpen(true);
     }, []);
 
     const onLogout = () => {

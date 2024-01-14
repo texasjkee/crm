@@ -3,7 +3,7 @@ import { type User, type UserSchema } from "../login/types/user";
 import { USER_LOCALSTORAGE_KEY } from "../../../components/common/const/localStorage";
 
 const initialState: UserSchema = {
-    authData: { id: 1, email: "1", accessToken: "1" },
+    authData: { name: "", email: "", token: "" },
     error: "",
 };
 

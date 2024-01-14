@@ -11,10 +11,9 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { EventFormTypes } from "./types";
 import { useYupValidationResolver } from "../common/hooks/useYupValidationResolver";
 import { validationEvents } from "./validationEvets";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "../../store/store";
 import { createEvent } from "../../store/slices/events/createEvent";
-import { getUserId } from "../../store/slices/events/selectors/getUserId";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 
 export interface EventsFormProps {
@@ -24,7 +23,6 @@ export interface EventsFormProps {
 const EventsForm = ({ onSuccess }: EventsFormProps) => {
     const resolver = useYupValidationResolver<EventFormTypes>(validationEvents);
     const dispatch = useDispatch<AppThunkDispatch>();
-    const userId = useSelector(getUserId);
     const test = new AdapterDayjs();
     console.log(test, "trst");
 
@@ -36,8 +34,7 @@ const EventsForm = ({ onSuccess }: EventsFormProps) => {
     } = useForm<EventFormTypes>({ resolver, defaultValues });
 
     const onSubmit: SubmitHandler<EventFormTypes> = (data) => {
-        if (userId)
-            dispatch(createEvent({ ...data, authorId: userId, isDone: false }));
+        dispatch(createEvent({ ...data, isDone: false }));
     };
 
     console.log(onSuccess);

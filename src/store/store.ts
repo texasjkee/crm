@@ -1,9 +1,9 @@
 import {
     type ReducersMapObject,
     configureStore,
-    type AnyAction,
     type ThunkDispatch,
     type Reducer,
+    AnyAction,
 } from "@reduxjs/toolkit";
 import { type StateSchema, type ThunkExtraArg } from "./types/stateSchema";
 import { createReducerManager } from "./reducersManager";

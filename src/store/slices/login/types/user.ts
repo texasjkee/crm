@@ -1,6 +1,6 @@
 export interface User {
-    id: number | null;
-    accessToken: string;
+    name: string;
+    token: string;
     email: string;
 }
 

@@ -10,9 +10,10 @@ interface IProps {
 }
 
 const LoginButtons = ({ authData, logOut, login }: IProps) => {
+    console.log(authData?.token, "token");
     return (
         <>
-            {authData?.accessToken ? (
+            {authData?.token ? (
                 <>
                     <NavLink to='/user-page'>
                         <Button>Account</Button>

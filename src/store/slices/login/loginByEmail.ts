@@ -4,6 +4,7 @@ import { type User } from "./types/user";
 import { type ThunkConfig } from "../../types/stateSchema";
 import { userActions } from "../user/userSlice";
 import axios from "axios";
+import { URL } from "../../../api/api";
 
 interface LoginByUsernameProps {
     email: string;
@@ -19,10 +20,10 @@ export const loginUpByEmail = createAsyncThunk<
     const { email, password } = authData;
 
     try {
-        const response = await extra.api.post<User>(
-            "http://localhost:3001/auth/login",
-            { email, password }
-        );
+        const response = await extra.api.post<User>(URL.LOGIN, {
+            email,
+            password,
+        });
 
         if (!response.data) {
             throw new Error();
