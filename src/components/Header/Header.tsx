@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from "react";
 import styled from "@emotion/styled";
 import LoginButtons from "../LoginForm/LoginButtons";
+import AccountButtons from "../AccountBurger/AccountButtons";
+import AccountBurger from "../AccountBurger/AccountBurger";
 import { getUserAuthData } from "../../store/slices/user/selectors.ts/getAuthData";
 import { useDispatch, useSelector } from "react-redux";
 import LoginModal from "../LoginModal/LoginModal";
@@ -12,7 +14,8 @@ function Header() {
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
     const authData = useSelector(getUserAuthData);
-
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
     const onCloseModal = () => {
         setIsOpen(false);
         dispatch(userActions.setError(""));
@@ -26,6 +29,14 @@ function Header() {
         dispatch(userActions.logout());
     };
 
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const burgerClose = () => {
+        setAnchorEl(null);
+    };
+
     console.log("header rerender");
     return (
         <HeaderWrapper>
@@ -33,16 +44,29 @@ function Header() {
                 <h1>CRM</h1>
             </NavLink>
             <ControllerPanel>
+                <AccountButtons
+                    authData={authData}
+                    handleClick={handleClick}
+                    open={open}
+                />
                 <LoginButtons
                     login={onShowModal}
                     authData={authData}
                     logOut={onLogout}
                 />
+
                 {isOpen && (
                     <LoginModal
                         title={"Enter"}
                         isOpen={isOpen}
                         onClose={onCloseModal}
+                    />
+                )}
+                {open && (
+                    <AccountBurger
+                        anchorEl={anchorEl}
+                        burgerClose={burgerClose}
+                        open={open}
                     />
                 )}
             </ControllerPanel>
