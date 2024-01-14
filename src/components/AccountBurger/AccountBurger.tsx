@@ -2,7 +2,7 @@ import * as React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { NavLink } from "react-router-dom";
-import { AppRoutes } from "../../routers/routerConfig";
+import { RoutePath } from "../../routers/routerConfig";
 
 interface IProps {
     anchorEl: HTMLElement | null;
@@ -22,7 +22,7 @@ const AccountBurger = ({ anchorEl, burgerClose, open }: IProps) => {
                     "aria-labelledby": "basic-button",
                 }}
             >
-                <NavLink to={AppRoutes.PROFILE}>
+                <NavLink to={RoutePath.profile.path!}>
                     <MenuItem onClick={burgerClose}>Profile</MenuItem>
                 </NavLink>
                 <MenuItem onClick={burgerClose}>My Event</MenuItem>

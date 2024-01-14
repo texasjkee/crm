@@ -31,7 +31,7 @@ function Header() {
         setAnchorEl(event.currentTarget);
     };
 
-    const handleClose = () => {
+    const burgerClose = () => {
         setAnchorEl(null);
     };
 
@@ -61,7 +61,7 @@ function Header() {
                 {open && (
                     <AccountBurger
                         anchorEl={anchorEl}
-                        handleClose={handleClose}
+                        burgerClose={burgerClose}
                         open={open}
                     />
                 )}
