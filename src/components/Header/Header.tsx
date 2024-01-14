@@ -7,6 +7,8 @@ import { getUserAuthData } from "../../store/slices/user/selectors.ts/getAuthDat
 import { useDispatch, useSelector } from "react-redux";
 import LoginModal from "../LoginModal/LoginModal";
 import { userActions } from "../../store/slices/user/userSlice";
+import { NavLink } from "react-router-dom";
+import { RoutePath } from "../../routers/routerConfig";
 
 function Header() {
     const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +40,9 @@ function Header() {
     console.log("header rerender");
     return (
         <HeaderWrapper>
-            <h1>CRM</h1>
+            <NavLink to={RoutePath.main}>
+                <h1>CRM</h1>
+            </NavLink>
             <ControllerPanel>
                 <AccountButtons
                     authData={authData}

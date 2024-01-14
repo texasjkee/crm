@@ -1,5 +1,5 @@
 import { RouterProvider } from "react-router-dom";
-import { Routing } from "./routers/router";
+import { Routing } from "./routers/routing";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { userActions } from "./store/slices/user/userSlice";
