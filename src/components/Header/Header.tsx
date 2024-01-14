@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from "react";
 import styled from "@emotion/styled";
 import LoginButtons from "../LoginForm/LoginButtons";
+import AccountButtons from "../AccountBurger/AccountButtons";
+import AccountBurger from "../AccountBurger/AccountBurger";
 import { getUserAuthData } from "../../store/slices/user/selectors.ts/getAuthData";
 import { useDispatch, useSelector } from "react-redux";
 import LoginModal from "../LoginModal/LoginModal";
@@ -23,22 +25,44 @@ function Header() {
     const onLogout = () => {
         dispatch(userActions.logout());
     };
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     console.log("header rerender");
     return (
         <HeaderWrapper>
             <h1>CRM</h1>
             <ControllerPanel>
+                <AccountButtons
+                    authData={authData}
+                    handleClick={handleClick}
+                    open={open}
+                />
                 <LoginButtons
                     login={onShowModal}
                     authData={authData}
                     logOut={onLogout}
                 />
+
                 {isOpen && (
                     <LoginModal
                         title={"Enter"}
                         isOpen={isOpen}
                         onClose={onCloseModal}
+                    />
+                )}
+                {open && (
+                    <AccountBurger
+                        anchorEl={anchorEl}
+                        handleClose={handleClose}
+                        open={open}
                     />
                 )}
             </ControllerPanel>
