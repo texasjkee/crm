@@ -12,7 +12,8 @@ function Header() {
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
     const authData = useSelector(getUserAuthData);
-
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
     const onCloseModal = () => {
         setIsOpen(false);
         dispatch(userActions.setError(""));
@@ -25,8 +26,7 @@ function Header() {
     const onLogout = () => {
         dispatch(userActions.logout());
     };
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
+
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };

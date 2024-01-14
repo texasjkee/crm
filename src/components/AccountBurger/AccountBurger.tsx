@@ -6,27 +6,26 @@ import { AppRoutes } from "../../routers/routerConfig";
 
 interface IProps {
     anchorEl: HTMLElement | null;
-    handleClose: () => void;
+    burgerClose: () => void;
     open: boolean;
 }
 
-const AccountBurger = ({ anchorEl, handleClose, open }: IProps) => {
+const AccountBurger = ({ anchorEl, burgerClose, open }: IProps) => {
     return (
         <div>
             <Menu
                 id='basic-menu'
                 anchorEl={anchorEl}
-                onClose={handleClose}
+                onClose={burgerClose}
                 open={open}
                 MenuListProps={{
                     "aria-labelledby": "basic-button",
                 }}
             >
                 <NavLink to={AppRoutes.PROFILE}>
-                    <MenuItem onClick={handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={burgerClose}>Profile</MenuItem>
                 </NavLink>
-                <MenuItem onClick={handleClose}>My Event</MenuItem>
-                <MenuItem onClick={handleClose}>Time: 01.01.2024</MenuItem>
+                <MenuItem onClick={burgerClose}>My Event</MenuItem>
             </Menu>
         </div>
     );
