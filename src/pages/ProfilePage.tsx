@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import EditIcon from "@mui/icons-material/Edit";
 import { Stack } from "@mui/material";
 
-const Profile = () => {
+export const Profile = () => {
     const [isLock, setIsLock] = useState(true);
 
     const unLockForm = () => {
@@ -27,12 +27,10 @@ const Profile = () => {
                     label='Name'
                     defaultValue='My Name'
                 />
-                <div onClick={unLockForm}>
+                <button onClick={unLockForm}>
                     <EditIcon />
-                </div>
+                </button>
             </Stack>
         </Box>
     );
 };
-
-export default Profile;

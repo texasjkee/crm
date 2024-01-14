@@ -1,37 +1,41 @@
 import React from "react";
-import { RouteObject } from "react-router-dom";
-import Calendar from "../components/Calendar/Calendar";
-import Profile from "../pages/ProfilePage";
+import { LazyRouteFunction, RouteObject } from "react-router";
 
 export enum AppRoutes {
     MAIN = "main",
     PROFILE = "profile",
 }
 
-export interface RouteScheme {
+export const RoutePath: Record<AppRoutes, string> = {
+    [AppRoutes.MAIN]: "/",
+    [AppRoutes.PROFILE]: "/profile",
+    // [AppRoutes.NOT_FOUND]: "*",
+};
+
+export interface RouteSchema {
     path?: string;
-    element: React.ReactNode;
+    element?: React.ReactNode;
     index?: boolean;
+    lazy?: LazyRouteFunction<RouteObject>;
 }
 
-export const RoutePath: Record<AppRoutes, RouteScheme> = {
+export const routeConfig: Record<AppRoutes, RouteSchema> = {
     [AppRoutes.MAIN]: {
-        element: <Calendar year={2023} month={1} />,
+        path: RoutePath.main,
         index: true,
+        async lazy() {
+            const { MainPage } = await import("../pages/CalendarPage");
+            return { Component: MainPage };
+        },
     },
     [AppRoutes.PROFILE]: {
-        element: <Profile />,
-        path: "/user-page",
+        path: RoutePath.profile,
+        index: true,
+        async lazy() {
+            const { Profile } = await import("../pages/ProfilePage");
+            return { Component: Profile };
+        },
     },
 };
-
-const mainRouter: RouteObject = {
-    element: RoutePath.main.element,
-    index: RoutePath.main.index,
-};
-const profileRouter: RouteObject = {
-    element: RoutePath.profile.element,
-    path: RoutePath.profile.path,
-};
-
-export const routeConfig = [mainRouter, profileRouter];
+// add function to get all keys from obj routeConfig and write in routeConfigArray
+export const routeConfigArray = 

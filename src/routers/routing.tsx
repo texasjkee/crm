@@ -1,16 +1,14 @@
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 
-import Layout from ".././layout/layoutElement";
+import Layout from "../layout/layoutElement";
 
-import { routeConfig, RoutePath } from "./routerConfig";
+import { routeConfigArray } from "./routerConfig";
 
 export const Routing = createBrowserRouter([
     {
         element: <Layout />,
         path: "/",
-        children: [...routeConfig],
+        children: [], // Add routeConfigArray
     },
 ]);
-
-console.log(routeConfig, RoutePath);
