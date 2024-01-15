@@ -9,6 +9,6 @@ export const Routing = createBrowserRouter([
     {
         element: <Layout />,
         path: "/",
-        children: [], // Add routeConfigArray
+        children: [...routeConfigArray], // Add routeConfigArray
     },
 ]);

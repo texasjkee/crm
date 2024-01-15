@@ -49,24 +49,21 @@ function Header() {
                     handleClick={handleClick}
                     open={open}
                 />
+                <AccountBurger
+                    anchorEl={anchorEl}
+                    burgerClose={burgerClose}
+                    open={open}
+                />
                 <LoginButtons
                     login={onShowModal}
                     authData={authData}
                     logOut={onLogout}
                 />
-
                 {isOpen && (
                     <LoginModal
                         title={"Enter"}
                         isOpen={isOpen}
                         onClose={onCloseModal}
-                    />
-                )}
-                {open && (
-                    <AccountBurger
-                        anchorEl={anchorEl}
-                        burgerClose={burgerClose}
-                        open={open}
                     />
                 )}
             </ControllerPanel>

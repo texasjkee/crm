@@ -7,7 +7,8 @@ import { Stack } from "@mui/material";
 export const Profile = () => {
     const [isLock, setIsLock] = useState(true);
 
-    const unLockForm = () => {
+    const unLockForm = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault();
         isLock ? setIsLock(false) : setIsLock(true);
     };
 
@@ -27,7 +28,7 @@ export const Profile = () => {
                     label='Name'
                     defaultValue='My Name'
                 />
-                <button onClick={unLockForm}>
+                <button onClick={(e) => unLockForm(e)}>
                     <EditIcon />
                 </button>
             </Stack>
