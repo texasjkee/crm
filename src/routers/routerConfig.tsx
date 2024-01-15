@@ -19,7 +19,7 @@ export interface RouteSchema {
     lazy?: LazyRouteFunction<RouteObject>;
 }
 
-export const routeConfig: Record<AppRoutes, RouteSchema> = {
+const routeConfig: Record<AppRoutes, RouteSchema> = {
     [AppRoutes.MAIN]: {
         path: RoutePath.main,
         index: true,
@@ -36,9 +36,7 @@ export const routeConfig: Record<AppRoutes, RouteSchema> = {
         },
     },
 };
-// add function to get all keys from obj routeConfig and write in routeConfigArray
-export const routeConfigArray = Object.values(routeConfig).map(
-    (routeConfig) => routeConfig
-);
 
-console.log(routeConfigArray);
+const routeConfigArray: RouteSchema[] = Object.values(routeConfig);
+
+export { routeConfig, routeConfigArray };

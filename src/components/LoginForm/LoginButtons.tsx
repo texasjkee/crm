@@ -1,8 +1,6 @@
 import React from "react";
 import { Button } from "@mui/material";
 import { User } from "../../store/slices/login/types/user";
-import { NavLink } from "react-router-dom";
-import { AppRoutes } from "../../routers/routerConfig";
 
 interface IProps {
     authData: User | undefined;
@@ -15,9 +13,6 @@ const LoginButtons = ({ authData, logOut, login }: IProps) => {
         <>
             {authData?.token ? (
                 <>
-                    <NavLink to={AppRoutes.PROFILE}>
-                        <Button>Account</Button>
-                    </NavLink>
                     <Button onClick={logOut}>Log out</Button>
                 </>
             ) : (

@@ -14,7 +14,6 @@ const AccountBurger = ({ anchorEl, burgerClose, open }: IProps) => {
     return (
         <div>
             <Menu
-                id='basic-menu'
                 anchorEl={anchorEl}
                 onClose={burgerClose}
                 open={open}
@@ -22,7 +21,7 @@ const AccountBurger = ({ anchorEl, burgerClose, open }: IProps) => {
                     "aria-labelledby": "basic-button",
                 }}
             >
-                <NavLink to={RoutePath.profile.path!}>
+                <NavLink to={RoutePath.profile}>
                     <MenuItem onClick={burgerClose}>Profile</MenuItem>
                 </NavLink>
                 <MenuItem onClick={burgerClose}>My Event</MenuItem>
