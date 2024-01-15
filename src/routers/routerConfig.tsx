@@ -30,7 +30,6 @@ export const routeConfig: Record<AppRoutes, RouteSchema> = {
     },
     [AppRoutes.PROFILE]: {
         path: RoutePath.profile,
-        index: true,
         async lazy() {
             const { Profile } = await import("../pages/ProfilePage");
             return { Component: Profile };
@@ -38,4 +37,8 @@ export const routeConfig: Record<AppRoutes, RouteSchema> = {
     },
 };
 // add function to get all keys from obj routeConfig and write in routeConfigArray
-export const routeConfigArray = 
+export const routeConfigArray = Object.values(routeConfig).map(
+    (routeConfig) => routeConfig
+);
+
+console.log(routeConfigArray);
