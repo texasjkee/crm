@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { USER_LOCALSTORAGE_KEY } from "../../../components/common/const/localStorage";
+import { USER_LOCAL_STORAGE_KEY } from "../../../components/common/const/localStorage";
 import { type User } from "./types/user";
 import { type ThunkConfig } from "../../types/stateSchema";
 import { userActions } from "../user/userSlice";
@@ -29,7 +29,7 @@ export const loginUpByEmail = createAsyncThunk<
             throw new Error();
         }
         localStorage.setItem(
-            USER_LOCALSTORAGE_KEY,
+            USER_LOCAL_STORAGE_KEY,
             JSON.stringify(response.data)
         );
         console.log(response.data, " data from login");

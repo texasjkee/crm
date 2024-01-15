@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { EventSchema } from "./types";
+import { EventSchema, EventTResponseType } from "./types";
 import { createEvent } from "./createEvent";
 
 const initialState: EventSchema = {
@@ -19,9 +19,9 @@ export const eventSlice = createSlice({
     name: "event",
     initialState,
     reducers: {
-        // setEvent: (state, action: PayloadAction<string>) => {
-        //     // state = action.payload;
-        // },
+        setEvent: (state, action: PayloadAction<EventTResponseType>) => {
+            state.events.push(action.payload);
+        },
         setSelectedDay: (state, action: PayloadAction<string>) => {
             state.selectedDay = action.payload;
             state.isOpen = true;
@@ -38,6 +38,12 @@ export const eventSlice = createSlice({
             state.error = undefined;
             state.isLoading = true;
             action.payload && state.events.push(action.payload);
+        });
+        // builder.addCase(createEvent.fulfilled, (state, action) => {
+        //     state.events.push(action.payload);
+        // });
+        builder.addCase(createEvent.rejected, (state, action) => {
+            state.error = action.payload;
         });
     },
 });

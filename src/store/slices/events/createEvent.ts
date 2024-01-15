@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { type ThunkConfig } from "../../types/stateSchema";
-import axios from "axios";
+import { isAxiosError } from "axios";
 import { eventAction } from "./eventSlice";
 import { EventTResponseType } from "./types";
 import { URL } from "../../../api/api";
@@ -24,15 +24,13 @@ export const createEvent = createAsyncThunk<
             URL.CREATE_EVENTS,
             createData
         );
-
-        console.log(response.data, "response data");
         if (!response.data) {
-            throw new Error();
+            throw new Error("Wrong with create event");
         }
-
+        dispatch(eventAction.setEvent(response.data));
         return response.data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
+    } catch (error: unknown) {
+        if (isAxiosError(error)) {
             dispatch(eventAction.setError(error.response?.data.message));
         }
         console.error(error);
