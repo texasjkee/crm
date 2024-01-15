@@ -1,5 +1,5 @@
 import { Button, TextField } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { Form } from "../LoginForm/LoginForm";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -11,10 +11,14 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { EventFormTypes } from "./types";
 import { useYupValidationResolver } from "../common/hooks/useYupValidationResolver";
 import { validationEvents } from "./validationEvets";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppThunkDispatch } from "../../store/store";
 import { createEvent } from "../../store/slices/events/createEvent";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
+import { getError } from "../../store/slices/events/selectors/getError";
+import WarnInfo from "../common/ui/Alert/WarnInfo";
+import { SEVERITY } from "../common/const/enums";
+import { UIContext } from "../UIContext";
 
 export interface EventsFormProps {
     onSuccess: () => void;
@@ -23,8 +27,8 @@ export interface EventsFormProps {
 const EventsForm = ({ onSuccess }: EventsFormProps) => {
     const resolver = useYupValidationResolver<EventFormTypes>(validationEvents);
     const dispatch = useDispatch<AppThunkDispatch>();
-    const test = new AdapterDayjs();
-    console.log(test, "trst");
+    const requestError = useSelector(getError);
+    const { setAlert } = useContext(UIContext);
 
     const {
         register,
@@ -33,9 +37,22 @@ const EventsForm = ({ onSuccess }: EventsFormProps) => {
         formState: { errors },
     } = useForm<EventFormTypes>({ resolver, defaultValues });
 
-    const onSubmit: SubmitHandler<EventFormTypes> = (data) => {
-        dispatch(createEvent({ ...data, isDone: false }));
+    const postEvent = async (values: EventFormTypes) => {
+        const result = await dispatch(
+            createEvent({ ...values, isDone: false })
+        );
+
+        if (result.meta.requestStatus === "fulfilled") {
+            setAlert({
+                show: true,
+                message: "Event created",
+                severity: "success",
+            });
+            onSuccess();
+        }
     };
+
+    const onSubmit: SubmitHandler<EventFormTypes> = (data) => postEvent(data);
 
     console.log(onSuccess);
     console.log("Events form rendered");
@@ -73,7 +90,9 @@ const EventsForm = ({ onSuccess }: EventsFormProps) => {
                 }
             />
             {errors && <p>{errors?.price?.message}</p>}
-
+            {requestError && (
+                <WarnInfo severity={SEVERITY.ERROR}>{requestError}</WarnInfo>
+            )}
             <Button color='primary' variant='contained' fullWidth type='submit'>
                 Save
             </Button>

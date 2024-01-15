@@ -1,6 +1,7 @@
 import { Suspense, memo } from "react";
 import { Modal, ModalSize } from "../common/ui/Modal/Modal";
 import { EventsFormAsync } from "../EventsForm/EventsFormAsync";
+import Loader from "../Loader/Loader";
 
 interface IProps {
     isOpen: boolean;
@@ -18,7 +19,7 @@ const EventsModal = memo(function EventsModal(props: IProps) {
             isOpen={isOpen}
             onClose={onClose}
         >
-            <Suspense fallback={""}>
+            <Suspense fallback={<Loader />}>
                 <EventsFormAsync onSuccess={onClose} />
             </Suspense>
         </Modal>
