@@ -24,4 +24,5 @@ export enum URL {
     LOGIN = "auth/login",
     REGISTRATION = "auth/register",
     CREATE_EVENTS = "events/",
+    CHANGE_NAME = "users",
 }

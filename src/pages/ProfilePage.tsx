@@ -45,11 +45,8 @@ export const Profile = () => {
         >
             <Stack
                 spacing={{ xs: 1, sm: 1 }}
-                direction='row'
-                useFlexGap
-                flexWrap='wrap'
                 display='grid'
-                gridTemplateColumns='25ch 30px'
+                gridTemplateColumns='25ch 35px'
                 marginLeft='30px'
             >
                 <TextField
