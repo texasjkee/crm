@@ -10,9 +10,7 @@ import {
     type StateSchemaKey,
 } from "./types/stateSchema";
 
-export function createReducerManager(
-    initialReducers: ReducersMapObject<StateSchema>
-): ReducerManager {
+export function createReducerManager( initialReducers: ReducersMapObject<StateSchema>): ReducerManager {
     const reducers = { ...initialReducers };
 
     let combinedReducer = combineReducers(reducers);
