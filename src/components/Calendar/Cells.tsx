@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState, memo } from "react";
+import React, { useCallback, useEffect, useState, memo } from "react";
 import {
     eachDayOfInterval,
     endOfMonth,
@@ -13,27 +13,26 @@ import { css } from "@emotion/react";
 import Icon from "./../../assets/svg/disabled.svg";
 
 import Day from "./Day";
-import { DayContainer } from "./styles";
-import { type TaskType } from "./Calendar";
 import Task from "./Task";
 import { AppThunkDispatch } from "../../store/store";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { eventAction } from "../../store/slices/events/eventSlice";
-// import { TaskModalAsync } from "../TaskModal/TaskModalAsync";
+import { getEvents } from "../../store/slices/events/selectors/getEvents";
+import { EventType } from "../../store/slices/events/types";
+import { DayContainer } from "./styles";
 
 interface IProps {
     currentDate: Date;
 }
 export interface DayWithTask {
     day: Date;
-    tasks?: TaskType[];
+    tasks?: EventType[];
 }
 
 const Cells = memo(function Cells({ currentDate }: IProps) {
     const [days, setDays] = useState<DayWithTask[]>([]);
-    const [tasks, setTasks] = useState<TaskType[]>([]);
+    const tasks = useSelector(getEvents);
     const dispatch = useDispatch<AppThunkDispatch>();
-    // const [selectedDay, setSelectedDay] = useState<Date>(currentDate);
     const monthStart = startOfMonth(currentDate);
     const monthEnd = endOfMonth(currentDate);
     const startOfCalendar = startOfWeek(monthStart, {
@@ -45,29 +44,21 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
         end: endOfCalendar,
     });
 
-    // const holdaTask = (values: Pick<TaskType, "priority" | "title">) => {
-    //     setTasks((prevTasks) => [
-    //         ...prevTasks,
-    //         { id: selectedDay, priority: values.priority, title: values.title },
-    //     ]);
-    // };
-
     const onShowModal = useCallback(
         (day: string) => {
             dispatch(eventAction.setSelectedDay(day));
-            console.log(day, "day");
         },
         [dispatch]
     );
 
-    const calculate = useMemo(() => {
+    const calculate = () => {
         const result = cells.map((item) => ({
             day: item,
-            tasks: tasks.filter((task) => isSameDay(new Date(task.id), item)),
+            tasks: tasks.filter((task) => isSameDay(new Date(task.date), item)),
         }));
 
         return result;
-    }, [cells, tasks]);
+    };
 
     const checkIfSameMonth = (combinedItem: DayWithTask) => {
         return !isSameMonth(new Date(combinedItem.day), monthStart)
@@ -77,13 +68,8 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
               : "";
     };
 
-    const handleReorder = (newOrder: unknown[]) => {
-        const typedTasks = newOrder as TaskType[];
-        setTasks(typedTasks);
-    };
-
     useEffect(() => {
-        setDays(calculate);
+        return setDays(calculate);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tasks, currentDate]);
 
@@ -93,9 +79,6 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
         <>
             {days.map((day) => (
                 <DayContainer
-                    axis='y'
-                    values={tasks}
-                    onReorder={handleReorder}
                     css={checkIfSameMonth(day)}
                     key={day.day.toString()}
                 >

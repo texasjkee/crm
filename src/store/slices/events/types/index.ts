@@ -1,7 +1,7 @@
-export interface EventTResponseType {
+export interface EventType {
     id?: number;
     name: string;
-    date: Date;
+    date: string;
     price: number;
     isDone: boolean;
     authorId: number;
@@ -17,5 +17,5 @@ export interface EventSchema {
     error: string | undefined;
     isOpen: boolean;
     isLoading: boolean;
-    events: EventTResponseType[];
+    events: EventType[];
 }
