@@ -1,43 +1,39 @@
-import { AccordionDetails, AccordionSummary, Checkbox } from "@mui/material";
+import { Checkbox, styled } from "@mui/material";
 import { memo } from "react";
 import { EventType } from "../../store/slices/events/types";
 import { format, parseISO } from "date-fns";
-import Accordion from "@mui/material/Accordion";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 interface IProp {
     task: EventType;
 }
 
 const Task = memo(function Task({ task }: IProp) {
     const { name, id, date, isDone, price } = task;
-    const formattedDate = format(parseISO(date), "MM/dd/yyyy");
+
+    const formattedDate = format(parseISO(date), "HH:mm");
     return (
-        <Accordion key={id}>
-            <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls='panel1-content'
-                id='panel1-header'
-            >
-                <span>Nikname: {name}</span>
-                <Checkbox aria-label='complete' value={isDone} />
-            </AccordionSummary>
-            <AccordionDetails>
-                <span>{formattedDate}</span>
-                <span>{price}</span>
-            </AccordionDetails>
-        </Accordion>
+        <Title key={id}>
+            <DeleteIcon />
+            <span>{name}</span>
+            <span>{formattedDate}</span>
+            <span>{price}</span>
+            <Checkbox value={isDone} />
+        </Title>
     );
 });
 
 export default Task;
 
-// const TasksContainer = styled(Paper)`
-//     display: flex;
-//     flex-direction: column;
-//     padding: 0 10px 10px 10px;
-//     margin-bottom: 5px;
-//     & span {
-//         text-align: left;
-//     }
-// `;
+const Title = styled("div")`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--blue);
+    border-radius: 8px;
+    padding: 0px 5px 0px;
+    margin-top: 2px;
+`;
+
+const DeleteIcon = styled(DeleteOutlineIcon)`
+    color: var(--red);
+`;

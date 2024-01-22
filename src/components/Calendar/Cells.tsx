@@ -11,7 +11,6 @@ import {
 
 import { css } from "@emotion/react";
 import Icon from "./../../assets/svg/disabled.svg";
-
 import Day from "./Day";
 import Task from "./Task";
 import { AppThunkDispatch } from "../../store/store";
@@ -64,11 +63,10 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
     };
 
     const checkIfSameMonth = (combinedItem: DayWithTask) => {
-        return !isSameMonth(new Date(combinedItem.day), monthStart)
-            ? dayStyle.disabled
-            : isSameDay(combinedItem.day, new Date())
-              ? dayStyle.selected
-              : "";
+        if (!isSameMonth(new Date(combinedItem.day), monthStart)) {
+            return dayStyle.disabled;
+        }
+        return isSameDay(combinedItem.day, new Date()) ? dayStyle.selected : "";
     };
 
     useEffect(() => {
