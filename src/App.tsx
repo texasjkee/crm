@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { userActions } from "./store/slices/user/userSlice";
 import { UIContextProvider } from "./components/UIContext";
-import { getAllEvents } from "./store/slices/events/getAllEvents";
 import { AppThunkDispatch } from "./store/store";
 
 function App() {
@@ -12,7 +11,6 @@ function App() {
 
     useEffect(() => {
         dispatch(userActions.initAuthData());
-        dispatch(getAllEvents());
     }, [dispatch]);
 
     return (
