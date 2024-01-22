@@ -16,7 +16,6 @@ export const createEvent = createAsyncThunk<
     ThunkConfig<string>
 >("event/create", async (createData, thunkApi) => {
     const { extra, rejectWithValue } = thunkApi;
-
     try {
         const response = await extra.api.post<EventType>(
             URL.CREATE_EVENTS,

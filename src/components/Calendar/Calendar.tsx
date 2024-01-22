@@ -92,7 +92,7 @@ export const CalendarWrapper = styled("div")`
     overflow: auto;
 `;
 export const Container = styled.div`
-    width: 95%;
+    width: 98%;
     margin: auto;
     overflow: hidden;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);

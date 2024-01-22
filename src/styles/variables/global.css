@@ -11,10 +11,12 @@
 	--font-xl: var(--font-size-xl) / var(--font-line-xl) var(--font-family-main);
 
 	--primary-dark-white: #f6f6fa;
-	--yellow: #bcdc49;
+	--yellow: #dfe2e8;
 	--grey: #ecf0f0;
 	--dark-grey: #e8eeee;
+	--red:#d24726;
     --white:#fff;
+	--blue:#1160b7;
 	--modal-z-index: 10;
 	--overlay-color: rgba(0 0 0 / 60%);
 }
