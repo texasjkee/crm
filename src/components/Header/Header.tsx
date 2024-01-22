@@ -3,17 +3,19 @@ import styled from "@emotion/styled";
 import LoginButtons from "../LoginForm/LoginButtons";
 import AccountButtons from "../AccountBurger/AccountButtons";
 import AccountBurger from "../AccountBurger/AccountBurger";
-import { getUserAuthData } from "../../store/slices/user/selectors.ts/getAuthData";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import LoginModal from "../LoginModal/LoginModal";
 import { userActions } from "../../store/slices/user/userSlice";
 import { NavLink } from "react-router-dom";
 import { RoutePath } from "../../routers/routerConfig";
+import useAuthStatus from "../../common/hooks/useAuthStatus";
+import { eventAction } from "../../store/slices/events/eventSlice";
 
 function Header() {
     const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
-    const authData = useSelector(getUserAuthData);
+    const { isLoggedIn, authData } = useAuthStatus();
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const onCloseModal = () => {
@@ -27,6 +29,7 @@ function Header() {
 
     const onLogout = () => {
         dispatch(userActions.logout());
+        dispatch(eventAction.setAllEvents([]));
     };
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -44,11 +47,9 @@ function Header() {
                 <h1>CRM</h1>
             </NavLink>
             <ControllerPanel>
-                <AccountButtons
-                    authData={authData}
-                    handleClick={handleClick}
-                    open={open}
-                />
+                {isLoggedIn && (
+                    <AccountButtons handleClick={handleClick} open={open} />
+                )}
                 <LoginButtons
                     login={onShowModal}
                     authData={authData}
