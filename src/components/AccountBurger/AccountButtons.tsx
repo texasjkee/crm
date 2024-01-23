@@ -9,18 +9,22 @@ interface IProps {
 }
 
 const AccountButtons = ({ authData, handleClick, open }: IProps) => {
-    return authData ? (
-        <Button
-            id='basic-button'
-            aria-controls={open ? "basic-menu" : undefined}
-            aria-haspopup='true'
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
-        >
-            {" "}
-            Account
-        </Button>
-    ) : null;
+    return (
+        <>
+            {authData?.token && (
+                <Button
+                    id='basic-button'
+                    aria-controls={open ? "basic-menu" : undefined}
+                    aria-haspopup='true'
+                    aria-expanded={open ? "true" : undefined}
+                    onClick={handleClick}
+                >
+                    {" "}
+                    Account
+                </Button>
+            )}
+        </>
+    );
 };
 
 export default AccountButtons;
