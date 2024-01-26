@@ -1,33 +1,39 @@
-import styled from "@emotion/styled";
-import { Paper } from "@mui/material";
+import { Checkbox, styled } from "@mui/material";
 import { memo } from "react";
-import Labels from "./Labels";
-import { type TaskType } from "./Calendar";
-import { Reorder } from "framer-motion";
-
+import { EventType } from "../../store/slices/events/types";
+import { format, parseISO } from "date-fns";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 interface IProp {
-    task: TaskType;
+    task: EventType;
 }
 
 const Task = memo(function Task({ task }: IProp) {
+    const { name, id, date, isDone, price } = task;
+
+    const formattedDate = format(parseISO(date), "HH:mm");
     return (
-        <Reorder.Item value={task}>
-            <TasksContainer>
-                <Labels colors={task.priority ?? []} />
-                <span>{task.title}</span>
-            </TasksContainer>
-        </Reorder.Item>
+        <Title key={id}>
+            <DeleteIcon />
+            <span>{name}</span>
+            <span>{formattedDate}</span>
+            <span>{price}</span>
+            <Checkbox value={isDone} />
+        </Title>
     );
 });
 
 export default Task;
 
-const TasksContainer = styled(Paper)`
+const Title = styled("div")`
     display: flex;
-    flex-direction: column;
-    padding: 0 10px 10px 10px;
-    margin-bottom: 5px;
-    & span {
-        text-align: left;
-    }
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--blue);
+    border-radius: 8px;
+    padding: 0px 5px 0px;
+    margin-top: 2px;
+`;
+
+const DeleteIcon = styled(DeleteOutlineIcon)`
+    color: var(--red);
 `;
