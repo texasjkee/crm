@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { EventSchema, EventTResponseType } from "./types";
+import { EventSchema, EventType } from "./types";
 import { createEvent } from "./createEvent";
+import { getAllEvents } from "./getAllEvents";
 
 const initialState: EventSchema = {
     id: "",
@@ -19,8 +20,11 @@ export const eventSlice = createSlice({
     name: "event",
     initialState,
     reducers: {
-        setEvent: (state, action: PayloadAction<EventTResponseType>) => {
+        setEvent: (state, action: PayloadAction<EventType>) => {
             state.events.push(action.payload);
+        },
+        setAllEvents: (state, action: PayloadAction<EventType[]>) => {
+            state.events = [...action.payload];
         },
         setSelectedDay: (state, action: PayloadAction<string>) => {
             state.selectedDay = action.payload;
@@ -39,10 +43,21 @@ export const eventSlice = createSlice({
             state.isLoading = true;
             action.payload && state.events.push(action.payload);
         });
-        // builder.addCase(createEvent.fulfilled, (state, action) => {
-        //     state.events.push(action.payload);
-        // });
+        builder.addCase(createEvent.fulfilled, (state, action) => {
+            state.events.push(action.payload);
+        });
         builder.addCase(createEvent.rejected, (state, action) => {
+            state.error = action.payload;
+        });
+        builder.addCase(getAllEvents.pending, (state, action) => {
+            state.error = undefined;
+            state.isLoading = true;
+            action.payload && state.events.push(action.payload);
+        });
+        builder.addCase(getAllEvents.fulfilled, (state, action) => {
+            state.events = [...action.payload];
+        });
+        builder.addCase(getAllEvents.rejected, (state, action) => {
             state.error = action.payload;
         });
     },

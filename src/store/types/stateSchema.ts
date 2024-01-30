@@ -9,6 +9,7 @@ import { type AxiosInstance } from "axios";
 import { type NavigateOptions, type To } from "react-router-dom";
 import { type UserSchema } from "../slices/login/types/user";
 import { EventSchema } from "../slices/events/types";
+import { NameSchema } from "../slices/profile/types";
 
 export interface StateSchema {
     user: UserSchema;
@@ -16,6 +17,7 @@ export interface StateSchema {
     // async reducer
     login?: LoginSchema;
     event: EventSchema;
+    profile: NameSchema;
 }
 
 export type StateSchemaKey = keyof StateSchema;
@@ -39,4 +41,5 @@ export interface ThunkExtraArg {
 export interface ThunkConfig<T> {
     rejectValue: T;
     extra: ThunkExtraArg;
+    state: StateSchema;
 }

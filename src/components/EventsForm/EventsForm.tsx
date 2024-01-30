@@ -54,9 +54,6 @@ const EventsForm = ({ onSuccess }: EventsFormProps) => {
 
     const onSubmit: SubmitHandler<EventFormTypes> = (data) => postEvent(data);
 
-    console.log(onSuccess);
-    console.log("Events form rendered");
-
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
             <TextField

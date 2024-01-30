@@ -30,16 +30,12 @@ interface CalendarProps {
 
 const Calendar: React.FC<CalendarProps> = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
-    // const [openEventsModal, setOpenEventsModal] = useState<boolean>(false);
     const isOpen = useSelector(getIsopen);
     const dispatch = useDispatch<AppThunkDispatch>();
 
     const onCloseModal = useCallback(() => {
         dispatch(eventAction.setCloseModal());
     }, [dispatch]);
-    // const openHandler = () => {
-    //     setOpenEventsModal(true);
-    // };
 
     const nextMonth = () => {
         setCurrentDate((prevDate) => addMonths(prevDate, 1));
@@ -96,7 +92,7 @@ export const CalendarWrapper = styled("div")`
     overflow: auto;
 `;
 export const Container = styled.div`
-    width: 95%;
+    width: 98%;
     margin: auto;
     overflow: hidden;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);

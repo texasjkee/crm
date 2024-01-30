@@ -32,7 +32,7 @@ export const loginUpByEmail = createAsyncThunk<
             USER_LOCAL_STORAGE_KEY,
             JSON.stringify(response.data)
         );
-        console.log(response.data, " data from login");
+
         dispatch(userActions.setAuthData(response.data));
 
         return response.data;

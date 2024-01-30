@@ -14,7 +14,6 @@ export const userSlice = createSlice({
         setUpdateName: (state, action: PayloadAction<string>) => {
             state.authData && (state.authData.name = action.payload);
         },
-
         setAuthData: (state, action: PayloadAction<User>) => {
             state.authData = action.payload;
         },
