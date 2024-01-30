@@ -4,7 +4,7 @@ import { USER_LOCAL_STORAGE_KEY } from "../../../components/common/const/localSt
 import { changeUserName } from "./changeName";
 
 const initialState: UserSchema = {
-    authData: { name: "", email: "", token: "" },
+    authData: { name: "1", email: "1", token: "1" },
     error: "",
 };
 
