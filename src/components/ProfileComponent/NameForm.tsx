@@ -6,10 +6,9 @@ import styled from "@emotion/styled";
 import { useYupValidationResolver } from "../common/hooks/useYupValidationResolver";
 import { validationProfile } from "./validationProfile";
 import { ProfileFormTypes } from "./types/";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "../../store/store";
-import { getTokenData } from "../../store/slices/user/selectors.ts/getTokenData";
-import { changeUserName } from "../../store/slices/user/changeName";
+import { changeUserName } from "../../store/slices/profile/changeName";
 
 export const defaultValues = {
     name: "",
@@ -23,7 +22,6 @@ export interface FormType {
 const NameForm = () => {
     const dispatch = useDispatch<AppThunkDispatch>();
     const resolver = useYupValidationResolver<FormType>(validationProfile);
-    const token = useSelector(getTokenData);
     const {
         register,
         handleSubmit,
@@ -33,9 +31,7 @@ const NameForm = () => {
         defaultValues,
     });
     const changeName = async (values: ProfileFormTypes) => {
-        const result = await dispatch(
-            changeUserName({ name: values.name, token: token })
-        );
+        const result = await dispatch(changeUserName(values));
         console.log(result);
     };
 
