@@ -38,10 +38,9 @@ export const eventSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(createEvent.pending, (state, action) => {
+        builder.addCase(createEvent.pending, (state) => {
             state.error = undefined;
             state.isLoading = true;
-            action.payload && state.events.push(action.payload);
         });
         builder.addCase(createEvent.fulfilled, (state, action) => {
             state.events.push(action.payload);

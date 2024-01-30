@@ -11,7 +11,6 @@ import { $api } from "../api/api";
 import { type NavigateOptions, type To } from "react-router-dom";
 import { userReducer } from "./slices/user/userSlice";
 import { eventReducer } from "./slices/events/eventSlice";
-import { profileReducer } from "./slices/profile/profileSlice";
 
 export function createReduxStore(
     initialState?: StateSchema,
@@ -22,7 +21,6 @@ export function createReduxStore(
         ...asyncReducers,
         user: userReducer,
         event: eventReducer,
-        profile: profileReducer,
     };
     const reducerManager = createReducerManager(rootReducers);
 
