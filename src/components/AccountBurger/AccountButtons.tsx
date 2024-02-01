@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button } from "@mui/base";
+import { ButtonWhite } from "../../styles/ui/buttons/buttons";
 
 interface IProps {
     handleClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -8,15 +8,14 @@ interface IProps {
 
 const AccountButtons = ({ handleClick, open }: IProps) => {
     return (
-        <Button
-            id='basic-button'
+        <ButtonWhite
             aria-controls={open ? "basic-menu" : undefined}
             aria-haspopup='true'
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
         >
             Account
-        </Button>
+        </ButtonWhite>
     );
 };
 

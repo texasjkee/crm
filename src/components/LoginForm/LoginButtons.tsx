@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "@mui/material";
 import { User } from "../../store/slices/login/types/user";
+import { ButtonWhite } from "../../styles/ui/buttons/buttons";
 
 interface IProps {
     authData: User | undefined;
@@ -12,11 +12,9 @@ const LoginButtons = ({ authData, logOut, login }: IProps) => {
     return (
         <>
             {authData?.token ? (
-                <>
-                    <Button onClick={logOut}>Log out</Button>
-                </>
+                <ButtonWhite onClick={logOut}>Log out</ButtonWhite>
             ) : (
-                <Button onClick={login}>login</Button>
+                <ButtonWhite onClick={login}>login</ButtonWhite>
             )}
         </>
     );

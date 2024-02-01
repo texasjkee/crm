@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { userActions } from "./store/slices/user/userSlice";
 import { UIContextProvider } from "./components/UIContext";
 import { AppThunkDispatch } from "./store/store";
+import { ThemeProvider } from "@mui/material";
+import { theme } from "./styles/theme";
 
 function App() {
     const dispatch = useDispatch<AppThunkDispatch>();
@@ -15,9 +17,11 @@ function App() {
 
     return (
         <div className='app'>
-            <UIContextProvider>
-                <RouterProvider router={Routing} />
-            </UIContextProvider>
+            <ThemeProvider theme={theme}>
+                <UIContextProvider>
+                    <RouterProvider router={Routing} />
+                </UIContextProvider>
+            </ThemeProvider>
         </div>
     );
 }
