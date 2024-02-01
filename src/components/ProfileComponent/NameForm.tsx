@@ -8,7 +8,8 @@ import { validationProfile } from "./validationProfile";
 import { ProfileFormTypes } from "./types/";
 import { useDispatch } from "react-redux";
 import { AppThunkDispatch } from "../../store/store";
-import { changeUserName } from "../../store/slices/profile/changeName";
+import { changeNameUser } from "../../store/slices/user/changeName";
+import { User } from "../../store/slices/login/types/user";
 
 export const defaultValues = {
     name: "",
@@ -19,7 +20,11 @@ export interface FormType {
     email: string;
 }
 
-const NameForm = () => {
+export interface IProps {
+    authData: User | undefined;
+}
+
+const NameForm = ({ authData }: IProps) => {
     const dispatch = useDispatch<AppThunkDispatch>();
     const resolver = useYupValidationResolver<FormType>(validationProfile);
     const {
@@ -31,7 +36,13 @@ const NameForm = () => {
         defaultValues,
     });
     const changeName = async (values: ProfileFormTypes) => {
-        const result = await dispatch(changeUserName(values));
+        const result = await dispatch(
+            changeNameUser({
+                name: values.name,
+                email: authData?.email,
+                token: authData?.token,
+            })
+        );
         console.log(result);
     };
 

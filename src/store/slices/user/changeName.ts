@@ -1,23 +1,24 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { type ThunkConfig } from "../../types/stateSchema";
-import { isAxiosError } from "axios";
 import { userActions } from "./userSlice";
 
 import { URL } from "../../../api/api";
 
 interface ChangeNameProps {
     name: string;
+    email?: string;
+    token?: string;
 }
 
 interface ChangeNameType {
     name: string;
 }
 
-export const createEvent = createAsyncThunk<
+export const changeNameUser = createAsyncThunk<
     ChangeNameType,
     ChangeNameProps,
     ThunkConfig<string>
->("user/create", async (createData, thunkApi) => {
+>("profile/change", async (createData, thunkApi) => {
     const { extra, dispatch, rejectWithValue } = thunkApi;
 
     try {
@@ -26,15 +27,13 @@ export const createEvent = createAsyncThunk<
             createData
         );
         if (!response.data) {
-            throw new Error("Wrong with create event");
+            throw new Error("wrong with change name");
         }
-        dispatch(userActions.setUpdateName(response.data));
+        dispatch(userActions.setUpdateName(response.data.name));
         return response.data;
-    } catch (error: unknown) {
-        if (isAxiosError(error)) {
-            dispatch(eventAction.setError(error.response?.data.message));
-        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
         console.error(error);
-        return rejectWithValue("Wrong with create event");
+        return rejectWithValue(error.response?.data.message);
     }
 });

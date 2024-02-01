@@ -15,7 +15,7 @@ const ProfileComponent = () => {
             <Wrapper>
                 <h5>Name:</h5>
                 {isLock ? (
-                    <NameForm />
+                    <NameForm authData={authData} />
                 ) : (
                     <>
                         <h5>{name}</h5>
