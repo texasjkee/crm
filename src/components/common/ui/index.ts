@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 export const ButtonGray = styled.button`
-    background-color: rgba(51, 51, 51, 0.05);
+    background-color: var(--yellow);
     border-radius: 8px;
     border-width: 0;
     cursor: pointer;

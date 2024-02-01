@@ -11,10 +11,6 @@ body {
 	color: var(--primary-color);
 }
 
-.app {
-	min-height: 100vh;
-}
-
 
 h1 {
 	font-size: 18px;

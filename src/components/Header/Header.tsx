@@ -10,6 +10,7 @@ import { NavLink } from "react-router-dom";
 import { RoutePath } from "../../routers/routerConfig";
 import useAuthStatus from "../../common/hooks/useAuthStatus";
 import { eventAction } from "../../store/slices/events/eventSlice";
+import { Typography } from "@mui/material";
 
 function Header() {
     const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +45,9 @@ function Header() {
     return (
         <HeaderWrapper>
             <NavLink to={RoutePath.main}>
-                <h1>CRM</h1>
+                <Typography color={"white"} variant='h5'>
+                    CRM
+                </Typography>
             </NavLink>
             <ControllerPanel>
                 {isLoggedIn && (
@@ -82,7 +85,7 @@ const HeaderWrapper = styled("div")`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: var(--yellow);
+    background: var(--purple);
 `;
 const ControllerPanel = styled("div")`
     display: flex;
