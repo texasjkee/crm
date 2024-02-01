@@ -154,7 +154,7 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
                 )}
 
                 <Button
-                    color='primary'
+                    color='secondary'
                     variant='contained'
                     fullWidth
                     type='submit'
@@ -177,7 +177,8 @@ const LoginForm = ({ onSuccess }: LoginFormProps) => {
 
 export default LoginForm;
 export const Form = styled("form")({
-    "& .MuiTextField-root, .MuiButton-root,  .MuiInput-underline": {
-        marginBottom: 10,
-    },
+    "& .MuiTextField-root, .MuiPaper-elevation, .MuiButton-root,  .MuiInput-underline":
+        {
+            marginBottom: 10,
+        },
 });
