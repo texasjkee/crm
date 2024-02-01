@@ -6,7 +6,7 @@ import {
     arrowDownStyle,
     arrowUpStyle,
 } from "./styles";
-import { ButtonGray } from "../common/ui";
+import { Button, Typography } from "@mui/material";
 
 interface IProps {
     prevMonth: () => void;
@@ -23,30 +23,44 @@ export const CalendarHeader = memo(function CalendarHeader({
     return (
         <HeaderContainer>
             <ButtonContainer>
-                <ButtonGray onClick={prevMonth}>
+                <Button
+                    color='secondary'
+                    variant='contained'
+                    onClick={prevMonth}
+                >
                     <span css={arrowUpStyle}>{"<"}</span>
-                </ButtonGray>
-                <ButtonGray onClick={nextMonth}>
+                </Button>
+                <Button
+                    color='secondary'
+                    variant='contained'
+                    onClick={nextMonth}
+                >
                     <span css={arrowDownStyle}>{">"}</span>
-                </ButtonGray>
+                </Button>
             </ButtonContainer>
-            <h5>{format(currentDate, headerDateFormat)}</h5>
+            <Typography variant='h3'>
+                {format(currentDate, headerDateFormat)}
+            </Typography>
             <div>
                 <ButtonContainer>
-                    <ButtonGray
+                    <Button
+                        color='secondary'
+                        variant='contained'
                         onClick={() => {
                             console.log("week");
                         }}
                     >
                         Week
-                    </ButtonGray>
-                    <ButtonGray
+                    </Button>
+                    <Button
+                        color='secondary'
+                        variant='contained'
                         onClick={() => {
                             console.log("day");
                         }}
                     >
                         Day
-                    </ButtonGray>
+                    </Button>
                 </ButtonContainer>
             </div>
         </HeaderContainer>

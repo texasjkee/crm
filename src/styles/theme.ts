@@ -6,7 +6,13 @@ export const theme = createTheme({
             main: "#503E9D",
         },
         secondary: {
-            main: "#f0f0f0",
+            main: "#FCD561",
         },
     },
 });
+theme.typography.h3 = {
+    fontSize: "1.2rem",
+    "@media (min-width:600px)": {
+        fontSize: "1.5rem",
+    },
+};

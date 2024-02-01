@@ -90,7 +90,12 @@ const EventsForm = ({ onSuccess }: EventsFormProps) => {
             {requestError && (
                 <WarnInfo severity={SEVERITY.ERROR}>{requestError}</WarnInfo>
             )}
-            <Button color='primary' variant='contained' fullWidth type='submit'>
+            <Button
+                color='secondary'
+                variant='contained'
+                fullWidth
+                type='submit'
+            >
                 Save
             </Button>
         </Form>
