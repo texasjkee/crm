@@ -1,7 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import React, { useContext } from "react";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
-import { Form } from "../LoginForm/LoginForm";
+import { Form } from "../AuthForm/AuthForm";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { defaultValues } from "./initValuesForm";

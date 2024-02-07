@@ -1,36 +1,27 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
-import LoginButtons from "../LoginForm/LoginButtons";
+import LoginButtons from "../AuthForm/AuthButtons";
 import AccountButtons from "../AccountBurger/AccountButtons";
 import AccountBurger from "../AccountBurger/AccountBurger";
 import { useDispatch } from "react-redux";
-import LoginModal from "../LoginModal/LoginModal";
-import { userActions } from "../../store/slices/user/userSlice";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { RoutePath } from "../../routers/routerConfig";
 import useAuthStatus from "../../common/hooks/useAuthStatus";
 import { eventAction } from "../../store/slices/events/eventSlice";
 import { Typography } from "@mui/material";
+import { authActions } from "store/slices/user/userSlice";
 
 function Header() {
-    const [isOpen, setIsOpen] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { isLoggedIn, authData } = useAuthStatus();
-
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const onCloseModal = () => {
-        setIsOpen(false);
-        dispatch(userActions.setError(""));
-    };
-
-    const onShowModal = useCallback(() => {
-        setIsOpen(true);
-    }, []);
 
     const onLogout = () => {
-        dispatch(userActions.logout());
+        dispatch(authActions.logout());
         dispatch(eventAction.setAllEvents([]));
+        navigate(RoutePath.auth);
     };
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -41,7 +32,7 @@ function Header() {
         setAnchorEl(null);
     };
 
-    console.log("header rerender");
+    console.log(isLoggedIn, "header rerender");
     return (
         <HeaderWrapper>
             <NavLink to={RoutePath.main}>
@@ -53,19 +44,8 @@ function Header() {
                 {isLoggedIn && (
                     <AccountButtons handleClick={handleClick} open={open} />
                 )}
-                <LoginButtons
-                    login={onShowModal}
-                    authData={authData}
-                    logOut={onLogout}
-                />
+                <LoginButtons authData={authData} logOut={onLogout} />
 
-                {isOpen && (
-                    <LoginModal
-                        title={"Enter"}
-                        isOpen={isOpen}
-                        onClose={onCloseModal}
-                    />
-                )}
                 {open && (
                     <AccountBurger
                         anchorEl={anchorEl}

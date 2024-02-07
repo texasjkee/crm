@@ -1,10 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { USER_LOCAL_STORAGE_KEY } from "../../../components/common/const/localStorage";
-import { type User } from "./types/user";
-import { type ThunkConfig } from "../../types/stateSchema";
-import { userActions } from "../user/userSlice";
-import axios from "axios";
-import { URL } from "../../../api/api";
+import { User } from "./types";
+import { URL } from "api/api";
+import { ThunkConfig } from "store/types/stateSchema";
+import { USER_LOCAL_STORAGE_KEY } from "components/common/const/localStorage";
+import { authActions } from "./userSlice";
 
 interface LoginByUsernameProps {
     email: string;
@@ -33,14 +32,12 @@ export const loginUpByEmail = createAsyncThunk<
             JSON.stringify(response.data)
         );
 
-        dispatch(userActions.setAuthData(response.data));
+        dispatch(authActions.setAuthData(response.data));
 
         return response.data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            dispatch(userActions.setError(error.response?.data.message));
-        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
         console.error(error);
-        return rejectWithValue("Wrong login or password");
+        return rejectWithValue(error.response.data.message);
     }
 });

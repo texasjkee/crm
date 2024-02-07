@@ -6,7 +6,10 @@ import {
     arrowDownStyle,
     arrowUpStyle,
 } from "./styles";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, IconButton } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
+import { RoutePath } from "../../routers/routerConfig";
 
 interface IProps {
     prevMonth: () => void;
@@ -20,6 +23,7 @@ export const CalendarHeader = memo(function CalendarHeader({
     nextMonth,
 }: IProps) {
     const headerDateFormat = "MMMM yyyy";
+    const navigate = useNavigate();
     return (
         <HeaderContainer>
             <ButtonContainer>
@@ -43,11 +47,14 @@ export const CalendarHeader = memo(function CalendarHeader({
             </Typography>
             <div>
                 <ButtonContainer>
+                    <IconButton color='primary' aria-label='add event'>
+                        <AddIcon />
+                    </IconButton>
                     <Button
                         color='secondary'
                         variant='contained'
                         onClick={() => {
-                            console.log("week");
+                            navigate(RoutePath.week);
                         }}
                     >
                         Week

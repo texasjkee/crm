@@ -1,21 +1,25 @@
 import { type PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { type User, type UserSchema } from "../login/types/user";
-import { USER_LOCAL_STORAGE_KEY } from "../../../components/common/const/localStorage";
+import { AuthSchema, User } from "./types";
+import { USER_LOCAL_STORAGE_KEY } from "components/common/const/localStorage";
+import { signUpByEmail } from "./signUpByEmail";
+import { loginUpByEmail } from "./loginUpByEmail";
 
-const initialState: UserSchema = {
-    authData: { name: "1", email: "1", token: "1" },
-    error: "",
+const initialState: AuthSchema = {
+    authData: { name: "", email: "", token: "", role: "" },
+    isLoading: false,
+    error: undefined,
 };
 
-export const userSlice = createSlice({
-    name: "user",
+export const authSlice = createSlice({
+    name: "auth",
     initialState,
     reducers: {
-        setUpdatName: (state, action: PayloadAction<string>) => {
-            state.authData && (state.authData.name = action.payload);
-        },
         setAuthData: (state, action: PayloadAction<User>) => {
             state.authData = action.payload;
+        },
+        logout: (state) => {
+            state.authData = undefined;
+            localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
         },
         initAuthData: (state) => {
             const user = localStorage.getItem(USER_LOCAL_STORAGE_KEY);
@@ -23,15 +27,39 @@ export const userSlice = createSlice({
                 state.authData = JSON.parse(user);
             }
         },
-        logout: (state) => {
-            state.authData = undefined;
-            localStorage.removeItem(USER_LOCAL_STORAGE_KEY);
-        },
         setError: (state, action: PayloadAction<string>) => {
             state.error = action.payload;
         },
     },
+    extraReducers: (builder) => {
+        builder
+            // signUpByEmail
+            .addCase(signUpByEmail.pending, (state) => {
+                state.error = undefined;
+                state.isLoading = true;
+            })
+            .addCase(signUpByEmail.fulfilled, (state) => {
+                state.isLoading = false;
+            })
+            .addCase(signUpByEmail.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+            // loginUpByEmail
+            .addCase(loginUpByEmail.pending, (state) => {
+                state.error = undefined;
+                state.isLoading = true;
+            })
+            .addCase(loginUpByEmail.fulfilled, (state) => {
+                state.isLoading = false;
+                state.error = undefined;
+            })
+            .addCase(loginUpByEmail.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            });
+    },
 });
 
-export const { actions: userActions } = userSlice;
-export const { reducer: userReducer } = userSlice;
+export const { actions: authActions } = authSlice;
+export const { reducer: authReducer } = authSlice;

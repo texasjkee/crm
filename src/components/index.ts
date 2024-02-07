@@ -1,5 +1,5 @@
 import { TaskModalAsync } from "./TaskModal/TaskModalAsync";
-import { LoginFormAsync } from "./LoginForm/LoginFormFormAsync";
+import { AuthFormAsync } from "./AuthForm/AuthFormFormAsync";
 import { EventsFormAsync } from "./EventsForm/EventsFormAsync";
 
-export { LoginFormAsync, TaskModalAsync, EventsFormAsync };
+export { AuthFormAsync as LoginFormAsync, TaskModalAsync, EventsFormAsync };
