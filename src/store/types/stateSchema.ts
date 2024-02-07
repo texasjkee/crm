@@ -4,18 +4,16 @@ import {
     type Reducer,
     type Action,
 } from "@reduxjs/toolkit";
-import { type LoginSchema } from "../slices/login/types/loginSchema";
 import { type AxiosInstance } from "axios";
 import { type NavigateOptions, type To } from "react-router-dom";
-import { type UserSchema } from "../slices/login/types/user";
 import { EventSchema } from "../slices/events/types";
+import { AuthSchema } from "store/slices/user/types";
 
 export interface StateSchema {
-    user: UserSchema;
+    auth: AuthSchema;
+    event: EventSchema;
 
     // async reducer
-    login?: LoginSchema;
-    event: EventSchema;
 }
 
 export type StateSchemaKey = keyof StateSchema;

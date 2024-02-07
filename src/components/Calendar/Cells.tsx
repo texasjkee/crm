@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, memo } from "react";
+import React, { useCallback, useEffect, useState, memo, useMemo } from "react";
 import {
     eachDayOfInterval,
     endOfMonth,
@@ -53,14 +53,14 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
         [dispatch]
     );
 
-    const calculate = () => {
+    const calculate = useMemo(() => {
         const result = cells.map((item) => ({
             day: item,
             tasks: tasks.filter((task) => isSameDay(new Date(task.date), item)),
         }));
 
         return result;
-    };
+    }, [cells, tasks]);
 
     const checkIfSameMonth = (combinedItem: DayWithTask) => {
         if (!isSameMonth(new Date(combinedItem.day), monthStart)) {
@@ -94,14 +94,6 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
                         ))}
                 </DayContainer>
             ))}
-            {/* 
-            <Suspense fallback={""}>
-                <TaskModalAsync
-                    holdTask={holdaTask}
-                    isOpen={isTaskModal}
-                    onClose={onCloseModal}
-                />
-            </Suspense> */}
         </>
     );
 });

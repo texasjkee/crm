@@ -1,6 +1,6 @@
 import axios from "axios";
 import { USER_LOCAL_STORAGE_KEY } from "../components/common/const/localStorage";
-import { User } from "../store/slices/login/types/user";
+import { User } from "store/slices/user/types";
 
 const authDataString: string | null = localStorage.getItem(
     USER_LOCAL_STORAGE_KEY

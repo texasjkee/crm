@@ -13,7 +13,7 @@ import Cells from "./Cells";
 import styled from "@emotion/styled";
 import EventsModal from "../EvetsModal/EventsModal";
 import { useDispatch, useSelector } from "react-redux";
-import { getIsopen } from "../../store/slices/events/selectors/getIsOpen";
+import { getIsopen as getIsOpen } from "../../store/slices/events/selectors/getIsOpen";
 import { AppThunkDispatch } from "../../store/store";
 import { eventAction } from "../../store/slices/events/eventSlice";
 
@@ -30,7 +30,7 @@ interface CalendarProps {
 
 const Calendar: React.FC<CalendarProps> = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
-    const isOpen = useSelector(getIsopen);
+    const isOpen = useSelector(getIsOpen);
     const dispatch = useDispatch<AppThunkDispatch>();
 
     const onCloseModal = useCallback(() => {

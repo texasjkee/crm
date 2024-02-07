@@ -2,7 +2,7 @@ import { RouterProvider } from "react-router-dom";
 import { Routing } from "./routers/routing";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { userActions } from "./store/slices/user/userSlice";
+import { authActions } from "./store/slices/user/userSlice";
 import { UIContextProvider } from "./components/UIContext";
 import { AppThunkDispatch } from "./store/store";
 import { ThemeProvider } from "@mui/material";
@@ -12,7 +12,7 @@ function App() {
     const dispatch = useDispatch<AppThunkDispatch>();
 
     useEffect(() => {
-        dispatch(userActions.initAuthData());
+        dispatch(authActions.initAuthData());
     }, [dispatch]);
 
     return (
