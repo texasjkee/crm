@@ -2,6 +2,7 @@ import React from "react";
 import { Typography, styled } from "@mui/material";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import { days } from "common/const";
 
 const Item = styled("div")(({ theme }) => ({
     ...theme.typography.body2,
@@ -12,7 +13,6 @@ const Item = styled("div")(({ theme }) => ({
 }));
 
 export const DayOfWeek = () => {
-    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2} columns={14}>

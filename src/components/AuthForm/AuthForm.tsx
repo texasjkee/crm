@@ -16,6 +16,7 @@ import { getIsLoading } from "store/slices/user/selectors.ts/getIsLoading";
 import { signUpByEmail } from "store/slices/user/signUpByEmail";
 import { loginUpByEmail } from "store/slices/user/loginUpByEmail";
 import { authActions } from "store/slices/user/userSlice";
+import { getAllEvents } from "store/slices/events/getAllEvents";
 
 export interface FormType {
     email: string;
@@ -79,7 +80,7 @@ const AuthForm = () => {
         );
         if (result.meta.requestStatus === "fulfilled") {
             navigate(RoutePath.main);
-
+            dispatch(getAllEvents(null));
             setAlert({
                 show: true,
                 message: "Login success",

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Week } from "components/Calendar/Calendar2.0.tsx/Week";
+import { Week } from "components/Calendar/Week.tsx/Week";
 import React from "react";
 
 export const WeekPage = () => {

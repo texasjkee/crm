@@ -6,14 +6,14 @@ import { LoaderFunction, redirect } from "react-router-dom";
 export enum AppRoutes {
     MAIN = "main",
     PROFILE = "profile",
-    CALENDAR = "week",
+    WEEK = "week",
     AUTH = "auth",
 }
 
 export const RoutePath: Record<AppRoutes, string> = {
     [AppRoutes.MAIN]: "/",
     [AppRoutes.PROFILE]: "/profile",
-    [AppRoutes.CALENDAR]: "/week",
+    [AppRoutes.WEEK]: "/week",
     [AppRoutes.AUTH]: "/login",
     // [AppRoutes.NOT_FOUND]: "*",
 };
@@ -56,11 +56,18 @@ const routeConfig: Record<AppRoutes, RouteSchema> = {
             return { Component: Profile };
         },
     },
-    [AppRoutes.CALENDAR]: {
+    [AppRoutes.WEEK]: {
         path: RoutePath.week,
         async lazy() {
             const { WeekPage: LessonsPage } = await import("../pages/WeekPage");
             return { Component: LessonsPage };
+        },
+        async loader() {
+            const user = localStorage.getItem(USER_LOCAL_STORAGE_KEY);
+            if (!user) {
+                throw redirect(RoutePath.auth);
+            }
+            return null;
         },
     },
 };

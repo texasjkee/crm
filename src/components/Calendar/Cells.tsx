@@ -19,8 +19,6 @@ import { eventAction } from "../../store/slices/events/eventSlice";
 import { getEvents } from "../../store/slices/events/selectors/getEvents";
 import { EventType } from "../../store/slices/events/types";
 import { DayContainer } from "./styles";
-import useAuthStatus from "../../common/hooks/useAuthStatus";
-import { getAllEvents } from "../../store/slices/events/getAllEvents";
 
 interface IProps {
     currentDate: Date;
@@ -44,7 +42,6 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
         start: startOfCalendar,
         end: endOfCalendar,
     });
-    const { isLoggedIn, authData } = useAuthStatus();
 
     const onShowModal = useCallback(
         (day: string) => {
@@ -73,12 +70,6 @@ const Cells = memo(function Cells({ currentDate }: IProps) {
         return setDays(calculate);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tasks, currentDate]);
-
-    useEffect(() => {
-        if (isLoggedIn) {
-            authData?.token && dispatch(getAllEvents(authData.token));
-        }
-    }, [authData?.token, dispatch, isLoggedIn]);
 
     return (
         <>

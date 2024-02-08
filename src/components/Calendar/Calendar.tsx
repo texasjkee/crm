@@ -1,21 +1,15 @@
 import React, { useCallback, useState } from "react";
-import {
-    format,
-    addMonths,
-    subMonths,
-    startOfMonth,
-    addDays,
-    startOfWeek,
-} from "date-fns";
+import { addMonths, subMonths } from "date-fns";
 import { CalendarHeader } from "./CalendarHeader";
 import WeekDays from "./WeekDays";
 import Cells from "./Cells";
 import styled from "@emotion/styled";
 import EventsModal from "../EvetsModal/EventsModal";
 import { useDispatch, useSelector } from "react-redux";
-import { getIsopen as getIsOpen } from "../../store/slices/events/selectors/getIsOpen";
+import { getIsOpen } from "store/slices/events/selectors/getIsOpen";
 import { AppThunkDispatch } from "../../store/store";
 import { eventAction } from "../../store/slices/events/eventSlice";
+import { days } from "common/const";
 
 export interface TaskType {
     id: Date;
@@ -45,20 +39,6 @@ const Calendar: React.FC<CalendarProps> = () => {
         setCurrentDate((prevDate) => subMonths(prevDate, 1));
     };
 
-    const renderDays = () => {
-        const dateFormat = "eeee";
-        const days = [];
-        const startDate = startOfWeek(startOfMonth(currentDate));
-
-        for (let i = 0; i < 7; i++) {
-            days.push(format(addDays(startDate, i), dateFormat));
-        }
-
-        return days;
-    };
-
-    const daysToRender = renderDays();
-
     console.log("calendar");
 
     return (
@@ -69,7 +49,7 @@ const Calendar: React.FC<CalendarProps> = () => {
                 nextMonth={nextMonth}
             />
             <CalendarWrapper>
-                {daysToRender.map((day, index) => (
+                {days.map((day, index) => (
                     <WeekDays key={index} day={day} />
                 ))}
                 <Cells currentDate={currentDate} />

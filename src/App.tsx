@@ -14,7 +14,6 @@ function App() {
     useEffect(() => {
         dispatch(authActions.initAuthData());
     }, [dispatch]);
-
     return (
         <div className='app'>
             <ThemeProvider theme={theme}>

@@ -1,18 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { type ThunkConfig } from "../../types/stateSchema";
 import { EventType } from "./types";
-import { URL } from "../../../api/api";
+import { ThunkConfig } from "store/types/stateSchema";
+import { URL } from "api/api";
 
 export const getAllEvents = createAsyncThunk<
     EventType[],
-    string,
+    null,
     ThunkConfig<string>
->("event/getAll", async (token, thunkApi) => {
+>("event/getAll", async (_, thunkApi) => {
     const { extra, rejectWithValue } = thunkApi;
     try {
-        const response = await extra.api.get<EventType[]>(URL.GET_ALL_EVENTS, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await extra.api.get<EventType[]>(URL.GET_ALL_EVENTS);
         if (!response.data) {
             throw new Error("Wrong with get all events");
         }

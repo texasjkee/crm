@@ -3,26 +3,15 @@ import styled from "@emotion/styled";
 import LoginButtons from "../AuthForm/AuthButtons";
 import AccountButtons from "../AccountBurger/AccountButtons";
 import AccountBurger from "../AccountBurger/AccountBurger";
-import { useDispatch } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
-import { RoutePath } from "../../routers/routerConfig";
-import useAuthStatus from "../../common/hooks/useAuthStatus";
-import { eventAction } from "../../store/slices/events/eventSlice";
+import { NavLink } from "react-router-dom";
+import { RoutePath } from "routers/routerConfig";
+import useAuthStatus from "common/hooks/useAuthStatus";
 import { Typography } from "@mui/material";
-import { authActions } from "store/slices/user/userSlice";
 
-function Header() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+export const Header = function Header() {
     const { isLoggedIn, authData } = useAuthStatus();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-
-    const onLogout = () => {
-        dispatch(authActions.logout());
-        dispatch(eventAction.setAllEvents([]));
-        navigate(RoutePath.auth);
-    };
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
@@ -32,7 +21,7 @@ function Header() {
         setAnchorEl(null);
     };
 
-    console.log(isLoggedIn, "header rerender");
+    console.log("header rerender");
     return (
         <HeaderWrapper>
             <NavLink to={RoutePath.main}>
@@ -44,7 +33,7 @@ function Header() {
                 {isLoggedIn && (
                     <AccountButtons handleClick={handleClick} open={open} />
                 )}
-                <LoginButtons authData={authData} logOut={onLogout} />
+                <LoginButtons authData={authData} />
 
                 {open && (
                     <AccountBurger
@@ -56,9 +45,7 @@ function Header() {
             </ControllerPanel>
         </HeaderWrapper>
     );
-}
-
-export default Header;
+};
 
 const HeaderWrapper = styled("div")`
     padding: 0 10px 0 10px;

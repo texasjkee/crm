@@ -1,14 +1,14 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Header from "../components/Header/Header";
 import { styled } from "@mui/material";
+import { Header } from "components/Header/Header";
 
 const layout = () => {
     return (
         <>
-            <Header></Header>
+            <Header />
             <Main>
-                <Outlet></Outlet>
+                <Outlet />
             </Main>
         </>
     );

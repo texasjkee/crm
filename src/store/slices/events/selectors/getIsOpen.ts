@@ -1,3 +1,3 @@
-import { StateSchema } from "../../../types/stateSchema";
+import { StateSchema } from "store/types/stateSchema";
 
-export const getIsopen = (state: StateSchema) => state.event.isOpen;
+export const getIsOpen = (state: StateSchema) => state.event.isOpen;
