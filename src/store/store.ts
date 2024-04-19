@@ -11,6 +11,7 @@ import { $api } from "../api/api";
 import { type NavigateOptions, type To } from "react-router-dom";
 import { eventReducer } from "./slices/events/eventSlice";
 import { authReducer } from "./slices/user/userSlice";
+import { profileReducer } from "./slices/profile/profileSlice";
 
 export function createReduxStore(
     initialState?: StateSchema,
@@ -21,6 +22,7 @@ export function createReduxStore(
         ...asyncReducers,
         auth: authReducer,
         event: eventReducer,
+        profile: profileReducer,
     };
     const reducerManager = createReducerManager(rootReducers);
 
@@ -51,3 +53,8 @@ export function createReduxStore(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AppThunkDispatch = ThunkDispatch<StateSchema, any, AnyAction>;
 export type AppDispatch = ReturnType<typeof createReduxStore>["dispatch"];
+
+// TODO: whty we don't do that?
+// export type TRootState = ReturnType<typeof store.getState>
+// export type AppDispatch = typeof store.dispatch
+// export const useAppDispatch: () => AppDispatch = useDispatch

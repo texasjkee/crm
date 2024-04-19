@@ -1,5 +1,5 @@
 import axios from "axios";
-import { USER_LOCAL_STORAGE_KEY } from "../components/common/const/localStorage";
+import { USER_LOCAL_STORAGE_KEY } from "common/const/localStorage";
 import { User } from "store/slices/user/types";
 
 const authDataString: string | null = localStorage.getItem(
@@ -25,4 +25,5 @@ export enum URL {
     REGISTRATION = "auth/register",
     CREATE_EVENTS = "events/",
     GET_ALL_EVENTS = "events",
+    CHANGE_PROFILE = "profile",
 }
